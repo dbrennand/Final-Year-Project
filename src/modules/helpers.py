@@ -1,4 +1,4 @@
-"""Helper functions for the application.
+"""Module containing helper functions for the application.
 """
 import loguru
 
