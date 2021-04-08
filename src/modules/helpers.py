@@ -99,17 +99,11 @@ def get_api_creds() -> typing.Tuple[dict, dict]:
     return twitter_api_creds, botometer_api_creds
 
 
-def get_email_creds() -> typing.Tuple[str, str, int]:
-    """Get email server credentials from environment variables.
-
-    Raises:
-        ValueError: Occurs when one or more email server credentials are missing.
+def get_email_creds() -> dict:
+    """Get email credentials for smtplib.
 
     Returns:
-        typing.Tuple[str, str, int]: A tuple containing two strings amd an integer.
-            String 1: The email server domain name.
-            String 2: The email server password.
-            Integer: The email server port used to connect to the email server.
+        dict: A dictionary containing the email credentials.
     """
     # Get email credentials from environment variables
-    pass
+    return get_env_vars(["EMAIL_SERVER_DOMAIN", "EMAIL_SERVER_PORT", "EMAIL_SENDER_ADDRESS", "EMAIL_SENDER_PASSWORD"])
