@@ -80,7 +80,9 @@ def get_api_creds() -> typing.Tuple[dict, dict]:
         Each dictionary can be passed directly to the constructor.
     """
     # Get Twitter and Botometer API credentials from environment variables
-    api_env_dict = get_env_vars(["TWITTER_API_KEY", "TWITTER_API_SECRET", "BOTOMETER_API_KEY"])
+    api_env_dict = get_env_vars(
+        ["TWITTER_API_KEY", "TWITTER_API_SECRET", "BOTOMETER_API_KEY"]
+    )
     # Create dictionary containing credentials for Tweepy constructor
     twitter_api_creds = {
         "consumer_key": api_env_dict["TWITTER_API_KEY"],
@@ -103,4 +105,11 @@ def get_email_creds() -> dict:
         dict: A dictionary containing the email credentials.
     """
     # Get email credentials from environment variables
-    return get_env_vars(["EMAIL_SERVER_DOMAIN", "EMAIL_SERVER_PORT", "EMAIL_SENDER_ADDRESS", "EMAIL_SENDER_PASSWORD"])
+    return get_env_vars(
+        [
+            "EMAIL_SERVER_DOMAIN",
+            "EMAIL_SERVER_PORT",
+            "EMAIL_SENDER_ADDRESS",
+            "EMAIL_SENDER_PASSWORD",
+        ]
+    )
