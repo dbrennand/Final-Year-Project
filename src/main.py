@@ -37,3 +37,6 @@ if __name__ == "__main__":
     args = parse_args()
     # Log username and email arguments
     helpers.log_message(message=f"Username: {args.username} Email: {args.email}.")
+    # Authenticate to the Twitter API (using Tweepy) and Botometer API (using botometer-python)
+    twitter_api = twtr.auth(twitter_api_creds=twitter_api_creds)
+    botometer_api = botm.auth(botometer_api_creds=botometer_api_creds)
