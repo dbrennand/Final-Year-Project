@@ -6,7 +6,7 @@ import argparse
 
 # Local imports
 import modules.helpers as helpers
-import modules.botometer as botm
+import modules.botm as botm
 import modules.twitter as twtr
 
 
