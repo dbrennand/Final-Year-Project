@@ -68,41 +68,35 @@ def get_env_vars(env_vars: list) -> dict:
     return env_vars_dict
 
 
-def get_api_creds() -> typing.Tuple[dict, str]:
-    """Get API credentials from environment variables.
+def get_api_creds() -> typing.Tuple[dict, dict]:
+    """Get API credentials for the Tweepy and Botometer constructors.
 
     Raises:
         ValueError: Occurs when one or more API credentials are missing.
 
     Returns:
-        typing.Tuple[dict, str]: A tuple containing a dictionary and a string.
-            Dictionary: Contains credentials for the Tweepy constructor.
-            String: Contains the Botometer API key.
+        typing.Tuple[dict, dict]: A tuple containing two dictionaries.
+            Dictionary 1: Contains credentials for the Tweepy constructor.
+            Dictionary 2: Contains credentials for the Botometer constructor.
+
+    Note:
+        Each dictionary can be passed directly to the constructor.
     """
-    # Get API credentials from environment variables
-    # Twitter API credentials
-    twitter_api_key = os.environ.get("TWITTER_API_KEY", None)
-    titter_api_secret = os.environ.get("TWITTER_API_SECRET", None)
-    # Botometer (Rapid) API key
-    botometer_api_key = os.environ.get("BOTOMETER_API_KEY", None)
-    # Check API credentials are not None
-    # If None, log error and raise ValueError
-    if not all([twitter_api_key, twitter_api_secret, botometer_api_key]):
-        log_message(
-            message="One or more API credentials are missing. Provide the environment variables: TWITTER_API_KEY, TWITTER_API_SECRET and BOTOMETER_API_KEY.",
-            level="ERROR",
-        )
-        raise ValueError(
-            "One or more API credentials are missing. See usage heading in the README file."
-        )
-    # Return a tuple containing a dictionary and string
-    # Dictionary contains credentials for the Tweepy constructor and the string is the Botometer API key
-    # Only returning the Botometer API key because Botometer also requires the Twitter API credentials in its constructor
-    twitter_auth = {
-        "consumer_key": twitter_api_key,
-        "consumer_secret": twitter_api_secret,
+    # Get Twitter and Botometer API credentials from environment variables
+    api_env_dict = get_env_vars(["TWITTER_API_KEY", "TWITTER_API_SECRET", "BOTOMETER_API_KEY"])
+    # Create dictionary containing credentials for Tweepy constructor
+    twitter_api_creds = {
+        "consumer_key": api_env_dict["TWITTER_API_KEY"],
+        "consumer_secret": api_env_dict["TWITTER_API_SECRET"],
     }
-    return twitter_auth, botometer_api_key
+    # Create dictionary containing credentials for Botometer constructor
+    botometer_api_creds = {
+        "rapidapi_key": api_env_dict["BOTOMETER_API_KEY"]
+        "consumer_key": api_env_dict["TWITTER_API_KEY"],
+        "consumer_secret": api_env_dict["TWITTER_API_SECRET"],
+    }
+    # Return a tuple containing the two dictionaries
+    return twitter_api_creds, botometer_api_creds
 
 
 def get_email_creds() -> typing.Tuple[str, str, int]:
