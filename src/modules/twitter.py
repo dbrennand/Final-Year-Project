@@ -2,9 +2,6 @@
 """
 import tweepy
 
-# Local import
-import modules.helpers as helpers
-
 
 def auth(twitter_api_creds: dict) -> tweepy.API:
     """Authenticate to the Twitter API using Tweepy.
