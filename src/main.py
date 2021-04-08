@@ -30,6 +30,8 @@ def parse_args() -> argparse.Namespace:
 if __name__ == "__main__":
     # Initialise logging
     helpers.init_logger()
+    # Get API credentials from environment variables
+    twitter_auth, botometer_auth = helpers.get_api_creds()
     # Parse CLI arguments
     args = parse_args()
     # Log username and email arguments
