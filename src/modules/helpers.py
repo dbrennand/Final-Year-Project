@@ -88,7 +88,7 @@ def get_api_creds() -> typing.Tuple[dict, dict]:
     }
     # Create dictionary containing credentials for Botometer constructor
     botometer_api_creds = {
-        "rapidapi_key": api_env_dict["BOTOMETER_API_KEY"]
+        "rapidapi_key": api_env_dict["BOTOMETER_API_KEY"],
         "consumer_key": api_env_dict["TWITTER_API_KEY"],
         "consumer_secret": api_env_dict["TWITTER_API_SECRET"],
     }
