@@ -44,7 +44,7 @@ def get_api_creds() -> typing.Tuple[dict, str]:
             Dictionary: Contains credentials for the Tweepy constructor.
             String: Contains the Botometer API key.
     """
-    # Obtain API credentials from environment variables
+    # Get API credentials from environment variables
     # Twitter API credentials
     twitter_api_key = os.environ.get("TWITTER_API_KEY", None)
     titter_api_secret = os.environ.get("TWITTER_API_SECRET", None)
