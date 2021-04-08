@@ -33,4 +33,4 @@ if __name__ == "__main__":
     # Parse CLI arguments
     args = parse_args()
     # Log username and email arguments
-    helpers.log_message(f"Username: {args.username} Email: {args.email}.")
+    helpers.log_message(message=f"Username: {args.username} Email: {args.email}.")
