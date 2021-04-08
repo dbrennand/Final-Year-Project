@@ -13,7 +13,7 @@ def auth(twitter_api_creds: dict) -> tweepy.API:
             Credentials are the API key and secret (also known as consumer key and secret respectively).
 
     Returns:
-        tweepy.API: A Tweepy API object authenticated to the Twitter API.
+        tweepy.API: A Tweepy.API object authenticated to the Twitter API.
     """
     # Initialise Tweepy application authentication flow
     auth = tweepy.AppAuthHandler(**twitter_api_creds)
