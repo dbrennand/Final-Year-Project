@@ -71,9 +71,6 @@ def get_env_vars(env_vars: list) -> dict:
 def get_api_creds() -> typing.Tuple[dict, dict]:
     """Get API credentials for the Tweepy and Botometer constructors.
 
-    Raises:
-        ValueError: Occurs when one or more API credentials are missing.
-
     Returns:
         typing.Tuple[dict, dict]: A tuple containing two dictionaries.
             Dictionary 1: Contains credentials for the Tweepy constructor.
