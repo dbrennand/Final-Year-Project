@@ -2,9 +2,6 @@
 """
 import botometer
 
-# Local import
-import modules.helpers as helpers
-
 
 def auth(botometer_api_creds: dict) -> botometer.Botometer:
     """Authenticate to the Botometer API using botometer-python.
