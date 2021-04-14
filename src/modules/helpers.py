@@ -7,27 +7,48 @@ import typing
 # Logging functions
 
 
-def init_logger() -> None:
-    """Initialise logging to stdout and a file for the application.
+def check_log_record_level(record: dict) -> typing.Tuple[bool, None]:
+    """A loguru filter to check each log record's level.
 
-    Returns:
-        None.
-    """
-    # Initialise logger to stdout and a file with specific formatting
-    loguru.logger.add("app_{time}.log", format="{time} {level} {message}")
+    If the log record's level is "ERROR", then terminate the application.
+    Otherwise, return True, returning the log record back to the configured handler.
 
-
-def log_message(message: str, level: str = "INFO") -> None:
-    """Log a message to stdout and the log file.
+    https://github.com/Delgan/loguru/issues/425
 
     Args:
-        message (str): The log message.
-        level (str, optional): The log level for the message. Defaults to "INFO".
+        record (dict): A log record containing metadata.
+
+    Returns:
+        typing.Tuple[bool, None]: Returns a boolean of True or None.
+            Returns True when the log record level is not "ERROR".
+            Returns None when the log record level is "ERROR". Application terminates.
+    """
+    if record["level"].name == "ERROR":
+        exit()
+    return True
+
+
+def init_log_handler() -> None:
+    """Initialise a log handler using loguru.
+
+    Adds a log handler with a sink to handle log messages.
+    By default, loguru adds a sink to stderr. This also configures a sink to send logs to a file.
+
+    https://loguru.readthedocs.io/en/stable/api/logger.html#loguru._logger.Logger.add
 
     Returns:
         None.
     """
-    loguru.logger.log(level, message)
+    # Add a log handler to send log messages to a file
+    # Specify formatting, filtering and other parameters
+    # Diagnose is False to prevent leak of credentials in production
+    loguru.logger.add(
+        sink="app_{time}.log",
+        format="{time:DD:MM:YYYY - HH:mm:ss} | {level} | {file}:{name}:{line} - {message}",
+        filter=check_log_record_level,
+        backtrace=True,
+        diagnose=False,
+    )
 
 
 # Utility functions
