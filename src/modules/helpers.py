@@ -3,6 +3,7 @@
 import loguru
 import os
 import typing
+import datetime
 
 # Logging functions
 
@@ -138,3 +139,14 @@ def get_email_creds() -> dict:
             "EMAIL_SENDER_PASSWORD",
         ]
     )
+
+
+def get_datetime():
+    """Get the current datetime as a formatted string.
+
+    NOTE: The datetime library uses the operating system's configured timezone.
+
+    Returns:
+        str: A string formatted like: "05/04/2021 at 13:04:15".
+    """
+    return datetime.datetime.now().strftime("%d/%m/%Y at %H:%M:%S")
