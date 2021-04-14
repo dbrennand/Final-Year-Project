@@ -3,6 +3,7 @@
 Example usage: python ./src/main.py twitterusername example@email.com --save /path/to/save/report/on/disk
 """
 import argparse
+import loguru
 
 # Local imports
 import modules.helpers as helpers
@@ -29,14 +30,14 @@ def parse_args() -> argparse.Namespace:
 
 if __name__ == "__main__":
     # Initialise logging
-    helpers.init_logger()
+    helpers.init_log_handler()
     # Get API and email credentials
     twitter_api_creds, botometer_api_creds = helpers.get_api_creds()
     email_creds = helpers.get_email_creds()
     # Parse CLI arguments
     args = parse_args()
     # Log username and email arguments
-    helpers.log_message(message=f"Username: {args.username} Email: {args.email}.")
+    loguru.logger.info("Username: @{args.username} Email: {args.email}")
     # Authenticate to the Twitter API (using Tweepy) and Botometer API (using botometer-python)
     twitter_api = twtr.auth(twitter_api_creds=twitter_api_creds)
     botometer_api = botm.auth(botometer_api_creds=botometer_api_creds)
