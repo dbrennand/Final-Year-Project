@@ -66,6 +66,7 @@ def get_env_vars(env_vars: list) -> dict:
     Returns:
         dict: A dictionary containing the environment variable name(s) and value(s) as key value pairs.
     """
+    loguru.logger.info(f"Getting environment variables: {env_vars}")
     # Initialise environment variable dictionary
     env_vars_dict = {}
     for env_var in env_vars:
@@ -73,17 +74,16 @@ def get_env_vars(env_vars: list) -> dict:
         # Default to None if not found
         env_var_value = os.environ.get(env_var, None)
         # Check env_var_value is not None
-        # If None, log error and raise ValueError
+        # If None log error
         if isinstance(env_var_value, None):
-            log_message(
-                message=f"Environment variable: {env_var} is missing. See prerequisite steps in the README file.",
-                level="ERROR",
-            )
-            raise ValueError(
+            loguru.logger.exception(
                 f"Environment variable: {env_var} is missing. See prerequisite steps in the README file."
             )
         # Is present as a str
         else:
+            loguru.logger.debug(
+                f"Environment variable: {env_var} found. Adding to dictionary."
+            )
             # Add environment variable name and value to env_vars_dict
             env_vars_dict[env_var] = env_var_value
     return env_vars_dict
@@ -100,6 +100,7 @@ def get_api_creds() -> typing.Tuple[dict, dict]:
     Note:
         Each dictionary can be passed directly to the constructor.
     """
+    loguru.logger.info("Getting API credentials.")
     # Get Twitter and Botometer API credentials from environment variables
     api_env_dict = get_env_vars(
         ["TWITTER_API_KEY", "TWITTER_API_SECRET", "BOTOMETER_API_KEY"]
@@ -125,6 +126,7 @@ def get_email_creds() -> dict:
     Returns:
         dict: A dictionary containing the email credentials.
     """
+    loguru.logger.info("Getting email credentials.")
     # Get email credentials from environment variables
     return get_env_vars(
         [
