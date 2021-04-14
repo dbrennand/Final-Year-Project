@@ -33,6 +33,8 @@ def init_log_handler() -> None:
 
     Adds a log handler with a sink to handle log messages.
     By default, loguru adds a sink to stderr. This also configures a sink to send logs to a file.
+    Furthermore, the logger is application wide meaning log calls can be made anywhere
+    as long as loguru is imported.
 
     https://loguru.readthedocs.io/en/stable/api/logger.html#loguru._logger.Logger.add
 
