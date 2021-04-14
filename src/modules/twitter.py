@@ -1,9 +1,7 @@
 """Module containing Twitter functions for the application.
 """
 import tweepy
-
-# Local import
-import modules.helpers as helpers
+import loguru
 
 
 def auth(twitter_api_creds: dict) -> tweepy.API:
@@ -18,6 +16,7 @@ def auth(twitter_api_creds: dict) -> tweepy.API:
     Returns:
         tweepy.API: A Tweepy.API object authenticated to the Twitter API.
     """
+    loguru.logger.info("Authenticating to the Twitter API.")
     # Initialise Tweepy application authentication flow
     auth = tweepy.AppAuthHandler(**twitter_api_creds)
     # Create and return an authenticated Tweepy API object
@@ -43,16 +42,15 @@ def get_friends_ids(api: tweepy.API, username: str) -> list:
     Notes:
         Using `api.friends_ids` method over `api.friends` because it provides 5000 results per 15 minute rate limit (5000/15mins) window vs the latter's 200/15mins.
     """
+    loguru.logger.info(f"Getting @{username}'s Twitter friends IDs.")
     # Initialise friends IDs list
     friends_ids_list = []
     # The Twitter API returns results in pages
     # Use Tweepy's Cursor class to interate over all friends IDs on every page
     try:
         for friend_id in tweepy.Cursor(api.friends_ids, screen_name=username).items():
+            loguru.logger.debug(f"Found friend with ID: {friend_id}")
             friends_ids_list.append(friend_id)
     except tweepy.TweepError as err:
-        helpers.log_message(
-            message=f"An error occurred retrieving {username}'s Twitter friends.\n{err}",
-            level="ERROR",
-        )
+        loguru.logger.exception(f"Failed to get @{username}'s Twitter friends.\n{err}")
     return friends_ids_list
