@@ -7,6 +7,8 @@ import loguru
 def auth(botometer_api_creds: dict) -> botometer.Botometer:
     """Authenticate to the Botometer API using botometer-python.
 
+    NOTE: botometer-python also authenticates to the Twitter API.
+
     Args:
         botometer_api_creds (dict): A dictionary containing the required credentials for the Botometer constructor
             to authenticate to the Botometer and Twitter API.
