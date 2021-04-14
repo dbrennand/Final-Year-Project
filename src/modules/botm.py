@@ -33,7 +33,7 @@ def get_friends_bot_likelihood_scores(api: botometer.Botometer, friends: list) -
 
     Args:
         api (botometer.Botometer): A botometer.Botometer object authenticated to the Botometer and Twitter API.
-        friends (list): A list containing a Twitter account's friends (represented as an ID).
+        friends (list): A list containing a Twitter account's friends (represented as IDs).
 
     Returns:
         list: A list containing the bot likelihood scores for each Twitter friend.
