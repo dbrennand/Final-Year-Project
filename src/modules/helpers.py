@@ -174,7 +174,7 @@ def render_report(
         template_dir (str, optional): The directory to look for the report template. Defaults to "{os.getcwd()}/src/template".
 
     Returns:
-        str: A unicode formatted string of the HTML rendered report.
+        str: A unicode formatted string of the rendered report.
     """
     # Create template loader
     template_loader = jinja2.FileSystemLoader(template_dir)
