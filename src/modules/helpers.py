@@ -193,3 +193,42 @@ def render_report(
         datetime_str=datetime_str,
     )
     return report_render
+
+
+def dump_report(
+    report_render: str, username: str, dump_dir: str = f"{os.getcwd()}/src/reports"
+) -> None:
+    """Dump the rendered friends bot likelihood report to a file.
+
+    Args:
+        report_render (str): A unicode formatted string of the rendered report.
+        username (str): The username of the Twitter account the report has been generated for.
+        dump_dir (str, optional): The directory to dump the report to. Defaults to f"{os.getcwd()}/src/reports".
+
+    Returns:
+        None.
+    """
+    # Check if the reports directory exists, if not create it
+    if not os.path.exists(dump_dir):
+        loguru.logger.debug("Reports directory does not exist. Creating...")
+        try:
+            os.mkdir(dump_dir)
+        except OSError as err:
+            # If an error occurs here, dump the report str and terminate the application
+            loguru.logger.debug(f"Report render dump:\n{report_render}")
+            loguru.logger.exception(
+                f"An exception occurred when creating reports directory at path: {dump_dir}\n{err}"
+            )
+    else:
+        loguru.logger.debug("Reports directory already exists.")
+    # Create report full path
+    report_file_path = f"{dump_dir}/@{username}_friends_report.html"
+    # Dump the report render to a file in the reports directory
+    try:
+        with open(report_file_path, "w") as report_file:
+            report_file.write(report_render)
+    except OSError as err:
+        loguru.logger.debug(f"Report render dump:\n{report_render}")
+        loguru.logger.exception(
+            f"An exception occurred when writing report render to file: {report_file_path}\n{err}"
+        )
