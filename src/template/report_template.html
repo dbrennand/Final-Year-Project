@@ -16,12 +16,12 @@
     <!-- Top report heading -->
     <h1 class="display-5 text-center fw-bold">Friends Bot Likelihood Report - @{{ username }}</h1>
     <!-- Heading for Bot Type and Score definitions table -->
-    <h5>Key - Bot Type and Score Definitions</h5>
+    <h5>Key - Bot Type Definitions</h5>
     <!-- Responsive table class -->
     <div class="table-responsive">
       <!-- Begin Bot Type and Score definitions table -->
       <table class="table table-striped table-bordered">
-        <caption>Bot definitions and scores taken from: <a
+        <caption>Bot definitions taken from: <a
             href="https://botometer.osome.iu.edu/faq#which-score">Botometer FAQs</a>
         </caption>
         <thead class="table-info">
@@ -55,32 +55,6 @@
             <th scope="row">Other</th>
             <td>Miscellaneous other bots obtained from manual annotation, user feedback, etc.</td>
           </tr>
-          <tr>
-            <td colspan="2">
-              <table class="table table-bordered mb-0">
-                <thead class="table-info">
-                  <tr>
-                    <th scope="col">Score</th>
-                    <th scope="col">Definition</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th scope="row">0 - Most Human Like</th>
-                    <td>The friend is very human like.</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3 - Unsure</th>
-                    <td>Botometer is unsure about the likeness of the friend.</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">5 - Most Bot Like</th>
-                    <td>The friend is very bot like.</td>
-                  </tr>
-                </tbody>
-              </table>
-            </td>
-          </tr>
         </tbody>
       </table>
       <!-- End of Bot Types and Score definitions table -->
@@ -93,7 +67,12 @@
           <tr>
             <th class="col align-middle" rowspan="2">Friend Username</th>
             <th class="col align-middle" rowspan="2">Majority Language</th>
-            <th class="col" colspan="7">Score</th>
+            <th class="col text-start" colspan="7">Score:
+              <p>0 - Most Human Like: The friend is very human like.
+                <br>3 - Unsure: Botometer is unsure about the likeness of the friend.
+                <br>5 - Most Bot Like: The friend is very bot like.
+              </p>
+            </th>
           </tr>
           <tr>
             <th class="col table-primary">Overall</th>
