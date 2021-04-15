@@ -4,6 +4,7 @@ import loguru
 import os
 import typing
 import datetime
+import pycountry
 import jinja2
 
 # Logging functions
@@ -152,6 +153,28 @@ def get_datetime() -> str:
     """
     loguru.logger.debug("Getting current datetime.")
     return datetime.datetime.now().strftime("%d/%m/%Y at %H:%M:%S")
+
+
+def get_lang_from_code(lang_code: str) -> str:
+    """Get language name from an ISO 639-1 language code.
+
+    Args:
+        lang_code (str): A language code in ISO 639-1 format.
+            Examples: "en", "de".
+
+    Returns:
+        str: The name of the language if successfully retrieved. Otherwise, returns "Unknown".
+    """
+    loguru.logger.info("Looking up language name using ISO language code: {lang_code}")
+    # Lookup language using ISO 639-1 language code provided by the Botometer API
+    language = pycountry.languages.get(alpha_2=lang_code)
+    # Check a language has been returned
+    if language:
+        # Get language name and return it
+        return language.name
+    # If not, return "Unknown"
+    else:
+        return "Unknown"
 
 
 # Report functions
