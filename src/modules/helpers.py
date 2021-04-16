@@ -201,7 +201,9 @@ def create_report_dir(reports_dir: str = f"{os.getcwd()}/src/reports") -> str:
         try:
             os.mkdir(reports_dir)
         except OSError as err:
-            loguru.logger.warning(f"Reports directory at path: {reports_dir} failed to create.")
+            loguru.logger.warning(
+                f"Reports directory at path: {reports_dir} failed to create."
+            )
             # Raise the OSError exception
             # This exception should be caught when the function is called
             raise err
@@ -282,4 +284,92 @@ def dump_report(report_render: str, username: str) -> None:
         loguru.logger.debug(f"Report render dump:\n{report_render}")
         loguru.logger.exception(
             f"An exception occurred when writing report render to file: {report_file_path}\n{err}"
+        )
+
+
+# Email function
+
+
+def send_email_report(
+    email_server: str,
+    email_server_port: int,
+    email_sender_addr: str,
+    email_sender_pass: str,
+    email_recipient_addr: str,
+    report_file_path: str,
+    username: str,
+) -> None:
+    """Send an email with the friends bot likelihood report attached.
+
+    Args:
+        email_server (str): The email server to use when sending the email.
+        email_server_port (int): The SSL port the email server is listening on.
+        email_sender_addr (str): The email address of the sender.
+        email_sender_pass (str): The senders email password used to authenticate to the email server.
+        email_recipient_addr (str): The email address of the recipient.
+        report_file_path (str): The path of the friends bot likelihood report to be attached to the email.
+        username (str): The username of the Twitter account the report has been generated for.
+
+    Returns:
+        None.
+    """
+    # Set email variables
+    email_subject = "Friends Bot Likelihood Report"
+    email_body_text = f"Please see the friends bot likelihood report for @{username} attached to this email."
+    # Create email multipart message
+    message = email.mime.multipart.MIMEMultipart()
+    # Add from, to, and email subject to email message
+    message["From"] = email_sender_addr
+    message["To"] = email_recipient_addr
+    message["Subject"] = email_subject
+    # Attach email body text to the email multipart message
+    message.attach(email.mime.text.MIMEText(email_body_text, "plain"))
+
+    # Open the bot likelihood report file to be attached to the email
+    with open(report_file_path, "rb") as report_attachment:
+        # Create report_part to include the report as an attachment
+        # Add report as application/octet-stream
+        report_part = email.mime.base.MIMEBase("application", "octet-stream")
+        # Set the report_part payload to the byte contents of the report
+        report_part.set_payload(report_attachment.read())
+
+    # Base64 encode report_part to be attached to the email multipart message
+    email.encoders.encode_base64(report_part)
+    # Add headers to the report_part for the report attachment
+    report_part.add_header(
+        "Content-Disposition", "attachment", filename=report_file_path
+    )
+    # Add report_part containing the report attachment to the email multipart message
+    message.attach(report_part)
+    # Convert email multipart message to a string for sending
+    message_str = message.as_string()
+
+    # Create secure SSL context for SMTP connection
+    # Based on best security practice:
+    # https://docs.python.org/3/library/ssl.html#best-defaults
+    ssl_context = ssl.create_default_context()
+
+    # Use a context manager to securely connect to the email server
+    # Send the email with the report attached
+    try:
+        with smtplib.SMTP_SSL(
+            host=email_server, port=email_server_port, context=ssl_context
+        ) as email_server:
+            # Authenticate with the email server
+            email_server.login(user=email_sender_addr, password=email_sender_pass)
+            email_server.sendmail(
+                from_addr=email_sender_addr,
+                to_addrs=email_recipient_addr,
+                msg=message_str,
+            )
+    # Log any exceptions that can be raised by `login` and `sendmail` methods
+    # Terminate the application if one occurs
+    except (
+        smtplib.SMTPAuthenticationError,
+        smtplib.SMTPRecipientsRefused,
+        smtplib.SMTPSenderRefused,
+        smtplib.SMTPDataError,
+    ) as err:
+        loguru.logger.exception(
+            f"Failed to send email from: {email_sender_addr} to: {email_recipient_addr} using the email server: {email_server}.\n{err}"
         )
