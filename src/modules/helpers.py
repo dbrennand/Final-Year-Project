@@ -366,6 +366,7 @@ def send_email_report(
                 to_addrs=email_recipient_addr,
                 msg=message_str,
             )
+            loguru.logger.success(f"Sent email to: {email_recipient_addr} with the friends bot likelihood report attached.")
     # Log any exceptions that can be raised by `login` and `sendmail` methods
     # Terminate the application if one occurs
     except (
