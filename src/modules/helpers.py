@@ -286,7 +286,7 @@ def dump_report(report_render: str, username: str) -> str:
         loguru.logger.debug(f"Report render dump:\n{report_render}")
         loguru.logger.exception(f"Failed to create reports directory.\n{err}")
     # Create report full path
-    report_file_path = f"{reports_dir}/@{username}_friends_report.html"
+    report_file_path = f"{reports_dir}/@{username}_friends_bot_likelihood_report.html"
     # Dump the report render to a file in the reports directory
     try:
         with open(report_file_path, "w") as report_file:
