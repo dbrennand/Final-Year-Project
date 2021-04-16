@@ -284,12 +284,13 @@ def dump_report(report_render: str, username: str) -> str:
     try:
         with open(report_file_path, "w") as report_file:
             report_file.write(report_render)
+        loguru.logger.info("Report file created at path: {report_file_path}")
+        return report_file_path
     except OSError as err:
         loguru.logger.debug(f"Report render dump:\n{report_render}")
         loguru.logger.exception(
             f"Failed to write report render to file at path: {report_file_path}.\n{err}"
         )
-    return report_file_path
 
 
 # Email function
