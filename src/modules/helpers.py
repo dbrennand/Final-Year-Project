@@ -83,17 +83,17 @@ def get_env_vars(env_vars: list) -> dict:
         env_var_value = os.environ.get(env_var, None)
         # Check env_var_value is not None
         # If None log error
-        if isinstance(env_var_value, None):
-            loguru.logger.exception(
-                f"Environment variable: {env_var} is missing. See prerequisite steps in the README file."
-            )
-        # Is present as a str
-        else:
+        if env_var_value is not None:
+            # Is present as a str
             loguru.logger.debug(
                 f"Environment variable: {env_var} found. Adding to dictionary."
             )
             # Add environment variable name and value to env_vars_dict
             env_vars_dict[env_var] = env_var_value
+        else:
+            loguru.logger.exception(
+                f"Environment variable: {env_var} is missing. See prerequisite steps in the README file."
+            )
     return env_vars_dict
 
 
