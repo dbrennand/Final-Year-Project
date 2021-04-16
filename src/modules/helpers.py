@@ -8,7 +8,14 @@ import pycountry
 import jinja2
 import smtplib
 import ssl
-import email
+
+# Explicitly declare email imports
+from email import encoders
+
+# Due to -> AttributeError: module 'email' has no attribute 'mime'
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
 
 # Logging functions
 
@@ -284,7 +291,7 @@ def dump_report(report_render: str, username: str) -> str:
     try:
         with open(report_file_path, "w") as report_file:
             report_file.write(report_render)
-        loguru.logger.info("Report file created at path: {report_file_path}")
+        loguru.logger.info(f"Report file created at path: {report_file_path}")
         return report_file_path
     except OSError as err:
         loguru.logger.debug(f"Report render dump:\n{report_render}")
@@ -312,7 +319,7 @@ def send_email_report(
         email_server_port (int): The SSL port the email server is listening on.
         email_sender_addr (str): The email address of the sender.
         email_sender_pass (str): The senders email password used to authenticate to the email server.
-        email_recipient_addr (str): The email address of the recipient.
+        email_recipient_addr (str): The recipient email address to send the report to.
         report_file_path (str): The path of the friends bot likelihood report to be attached to the email.
         username (str): The username of the Twitter account the report has been generated for.
 
@@ -323,20 +330,20 @@ def send_email_report(
     email_subject = "Friends Bot Likelihood Report"
     email_body_text = f"Please see the friends bot likelihood report for @{username} attached to this email."
     # Create email multipart message
-    message = email.mime.multipart.MIMEMultipart()
+    message = MIMEMultipart()
     # Add from, to, and email subject to email message
     message["From"] = email_sender_addr
     message["To"] = email_recipient_addr
     message["Subject"] = email_subject
     # Attach email body text to the email multipart message
-    message.attach(email.mime.text.MIMEText(email_body_text, "plain"))
+    message.attach(MIMEText(email_body_text, "plain"))
 
     # Open the bot likelihood report file to be attached to the email
     try:
         with open(report_file_path, "rb") as report_attachment:
             # Create report_part to include the report as an attachment
             # Add report as application/octet-stream
-            report_part = email.mime.base.MIMEBase("application", "octet-stream")
+            report_part = MIMEBase("application", "octet-stream")
             # Set the report_part payload to the byte contents of the report
             report_part.set_payload(report_attachment.read())
     except OSError as err:
@@ -345,7 +352,7 @@ def send_email_report(
         )
 
     # Base64 encode report_part to be attached to the email multipart message
-    email.encoders.encode_base64(report_part)
+    encoders.encode_base64(report_part)
     # Add headers to the report_part for the report attachment
     report_part.add_header(
         "Content-Disposition", "attachment", filename=report_file_path
@@ -363,17 +370,24 @@ def send_email_report(
     # Use a context manager to securely connect to the email server
     # Send the email with the report attached
     try:
+        loguru.logger.debug(
+            f"Connecting to the email server: {email_server} on port: {email_server_port}"
+        )
         with smtplib.SMTP_SSL(
             host=email_server, port=email_server_port, context=ssl_context
-        ) as email_server:
+        ) as smtp_connection:
             # Authenticate with the email server
-            email_server.login(user=email_sender_addr, password=email_sender_pass)
-            email_server.sendmail(
+            loguru.logger.debug(f"Authenticating to the email server: {email_server}")
+            smtp_connection.login(user=email_sender_addr, password=email_sender_pass)
+            loguru.logger.debug(f"Sending email to: {email_recipient_addr}")
+            smtp_connection.sendmail(
                 from_addr=email_sender_addr,
                 to_addrs=email_recipient_addr,
                 msg=message_str,
             )
-            loguru.logger.success(f"Sent email to: {email_recipient_addr} with the friends bot likelihood report attached.")
+            loguru.logger.success(
+                f"Sent email to: {email_recipient_addr} with the friends bot likelihood report attached."
+            )
     # Log any exceptions that can be raised by `login` and `sendmail` methods
     # Terminate the application if one occurs
     except (
