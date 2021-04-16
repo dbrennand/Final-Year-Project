@@ -355,7 +355,10 @@ def send_email_report(
     encoders.encode_base64(report_part)
     # Add headers to the report_part for the report attachment
     report_part.add_header(
-        "Content-Disposition", "attachment", filename=report_file_path
+        # Get report_file_path basename
+        "Content-Disposition",
+        "attachment",
+        filename=os.path.basename(fr"{report_file_path}"),
     )
     # Add report_part containing the report attachment to the email multipart message
     message.attach(report_part)
