@@ -1,6 +1,6 @@
 """Main entrypoint file for the application.
 
-Example usage: python ./src/main.py twitterusername example@email.com --save /path/to/save/report/on/disk
+Example usage: python ./src/main.py twitterusername example@email.com
 """
 import argparse
 import loguru
@@ -46,4 +46,24 @@ if __name__ == "__main__":
     # Get a list of the Twitter user's friends bot likelihood scores
     friends_bot_likelihood_scores = botm.get_friends_bot_likelihood_scores(
         api=botometer_api, friends=friends_ids
+    )
+    # Render friends bot likelihood report from the template
+    report_render = helpers.render_report(
+        username=args.username,
+        friends_bot_likelihood_scores=friends_bot_likelihood_scores,
+    )
+    # Dump the friends bot likelihood report to a file in the reports directory
+    # If the reports directory does not exist, it is created
+    report_file_path = helpers.dump_report(
+        report_render=report_render, username=args.username
+    )
+    # Finally, send the email with the friends bot likelihood report attached
+    helpers.send_email_report(
+        email_server=email_creds["EMAIL_SERVER_DOMAIN"],
+        email_server_port=int(email_creds["EMAIL_SERVER_PORT"]),
+        email_sender_addr=email_creds["EMAIL_SENDER_ADDRESS"],
+        email_sender_pass=email_creds["EMAIL_SENDER_PASSWORD"],
+        email_recipient_addr=args.email,
+        report_file_path=report_file_path,
+        username=args.username,
     )
