@@ -168,16 +168,20 @@ def get_lang_from_code(lang_code: str) -> str:
             Examples: "en", "de".
 
     Returns:
-        str: The name of the language if successfully retrieved. Otherwise, returns "Unknown".
+        str: The name of the language if available. Otherwise, returns "Unknown".
     """
+    loguru.logger.info(f"Getting language name for code: {lang_code}")
     # Lookup language using ISO 639-1 language code provided by the Botometer API
     language = pycountry.languages.get(alpha_2=lang_code)
     # Check a language has been returned
     if language:
         # Get language name and return it
+        language_name = language.name
+        loguru.logger.debug(f"Got language name: {language_name}")
         return language.name
     # If not, return "Unknown"
     else:
+        loguru.logger.debug(f"Language name for code: {lang_code} unknown.")
         return "Unknown"
 
 
