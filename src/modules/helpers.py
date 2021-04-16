@@ -6,6 +6,9 @@ import typing
 import datetime
 import pycountry
 import jinja2
+import smtplib
+import ssl
+import email
 
 # Logging functions
 
@@ -174,6 +177,34 @@ def get_lang_from_code(lang_code: str) -> str:
     # If not, return "Unknown"
     else:
         return "Unknown"
+
+
+def create_report_dir(reports_dir: str = f"{os.getcwd()}/src/reports") -> str:
+    """Create a directory called "reports" to store the friends bot likelihood report(s).
+
+    NOTE: This function is called in `dump_report`.
+
+    Args:
+        reports_dir (str, optional): The path to the reports directory to be created. Defaults to f"{os.getcwd()}/src/reports".
+
+    Raises:
+        err: Raises OSError when the directory fails to be created.
+
+    Returns:
+        str: The path of the reports directory.
+    """
+    # Check if the reports directory exists, if not create it
+    if not os.path.exists(reports_dir):
+        loguru.logger.debug(f"Reports directory at path: {reports_dir} does not exist. Creating...")
+        try:
+            os.mkdir(reports_dir)
+        except OSError as err:
+            # Raise the exception
+            # This exception should be caught when the function is called
+            raise err
+    else:
+        loguru.logger.debug(f"Reports directory at path: {reports_dir} already exists.")
+    return reports_dir
 
 
 # Report functions
