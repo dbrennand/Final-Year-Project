@@ -202,6 +202,9 @@ def render_report(
     template_loader = jinja2.FileSystemLoader(template_dir)
     # Create template environment
     environment = jinja2.Environment(loader=template_loader)
+    # Add `get_lang_from_code` function to the template environment
+    # So it can be called in the template
+    environment.globals["get_lang_from_code"] = get_lang_from_code
     # Get the report template
     report_template = environment.get_template(name="report_template.html")
     # Get datetime formatted string to be provided to the template
