@@ -154,8 +154,10 @@ def get_datetime() -> str:
     Returns:
         str: A string formatted like: "05/04/2021 at 13:04:15".
     """
-    loguru.logger.debug("Getting current datetime.")
-    return datetime.datetime.now().strftime("%d/%m/%Y at %H:%M:%S")
+    loguru.logger.info("Getting current datetime string.")
+    datetime_str = datetime.datetime.now().strftime("%d/%m/%Y at %H:%M:%S")
+    loguru.logger.debug(f"Datetime string: {datetime_str}")
+    return datetime_str
 
 
 def get_lang_from_code(lang_code: str) -> str:
