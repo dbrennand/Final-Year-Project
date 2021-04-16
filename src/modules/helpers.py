@@ -256,7 +256,7 @@ def render_report(
     return report_render
 
 
-def dump_report(report_render: str, username: str) -> None:
+def dump_report(report_render: str, username: str) -> str:
     """Dump the rendered friends bot likelihood report to a file.
 
     Args:
@@ -264,7 +264,7 @@ def dump_report(report_render: str, username: str) -> None:
         username (str): The username of the Twitter account the report has been generated for.
 
     Returns:
-        None.
+        str: The full path to the friends bot likelihood report.
     """
     # Ensure the reports directory is created to dump the report
     try:
@@ -285,6 +285,7 @@ def dump_report(report_render: str, username: str) -> None:
         loguru.logger.exception(
             f"An exception occurred when writing report render to file: {report_file_path}\n{err}"
         )
+    return report_file_path
 
 
 # Email function
