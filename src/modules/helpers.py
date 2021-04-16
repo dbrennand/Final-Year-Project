@@ -202,7 +202,7 @@ def create_report_dir(reports_dir: str = f"{os.getcwd()}/src/reports") -> str:
             os.mkdir(reports_dir)
         except OSError as err:
             loguru.logger.warning(
-                f"Reports directory at path: {reports_dir} failed to create."
+                f"Failed to create reports directory at path: {reports_dir}"
             )
             # Raise the OSError exception
             # This exception should be caught when the function is called
@@ -271,9 +271,7 @@ def dump_report(report_render: str, username: str) -> str:
         reports_dir = create_report_dir()
     except OSError as err:
         loguru.logger.debug(f"Report render dump:\n{report_render}")
-        loguru.logger.exception(
-            f"An exception occurred when creating the reports directory.\n{err}"
-        )
+        loguru.logger.exception(f"Failed to create reports directory.\n{err}")
     # Create report full path
     report_file_path = f"{reports_dir}/@{username}_friends_report.html"
     # Dump the report render to a file in the reports directory
@@ -283,7 +281,7 @@ def dump_report(report_render: str, username: str) -> str:
     except OSError as err:
         loguru.logger.debug(f"Report render dump:\n{report_render}")
         loguru.logger.exception(
-            f"An exception occurred when writing report render to file: {report_file_path}\n{err}"
+            f"Failed to write report render to file at path: {report_file_path}.\n{err}"
         )
     return report_file_path
 
@@ -327,12 +325,17 @@ def send_email_report(
     message.attach(email.mime.text.MIMEText(email_body_text, "plain"))
 
     # Open the bot likelihood report file to be attached to the email
-    with open(report_file_path, "rb") as report_attachment:
-        # Create report_part to include the report as an attachment
-        # Add report as application/octet-stream
-        report_part = email.mime.base.MIMEBase("application", "octet-stream")
-        # Set the report_part payload to the byte contents of the report
-        report_part.set_payload(report_attachment.read())
+    try:
+        with open(report_file_path, "rb") as report_attachment:
+            # Create report_part to include the report as an attachment
+            # Add report as application/octet-stream
+            report_part = email.mime.base.MIMEBase("application", "octet-stream")
+            # Set the report_part payload to the byte contents of the report
+            report_part.set_payload(report_attachment.read())
+    except OSError as err:
+        loguru.logger.exception(
+            "Failed to open report at path: {report_file_path}.\n{err}"
+        )
 
     # Base64 encode report_part to be attached to the email multipart message
     email.encoders.encode_base64(report_part)

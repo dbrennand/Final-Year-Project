@@ -102,5 +102,5 @@ def get_friends_bot_likelihood_scores(api: botometer.Botometer, friends: list) -
         else:
             # The list contains no results, log a terminating error
             loguru.logger.exception(
-                f"No friends bot likelihood results were collected.\n{err}"
+                f"Failed to get any friends bot likelihood results.\n{err}"
             )

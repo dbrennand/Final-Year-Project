@@ -52,5 +52,5 @@ def get_friends_ids(api: tweepy.API, username: str) -> list:
             loguru.logger.debug(f"Found friend with ID: {friend_id}")
             friends_ids_list.append(friend_id)
     except tweepy.TweepError as err:
-        loguru.logger.exception(f"An exception occurred when getting @{username}'s Twitter friends.\n{err}")
+        loguru.logger.exception(f"Failed to get @{username}'s Twitter friends.\n{err}")
     return friends_ids_list
