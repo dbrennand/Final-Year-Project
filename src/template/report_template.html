@@ -90,7 +90,7 @@
               {# If so, use English scores #}
               {%- if friend_scores.user.majority_lang == "en" -%}
               <tr>
-                <th scope="col"><a href="https://twitter.com/{{ friend_scores.user.screen_name }}">@{{ friend_scores.user.screen_name }}</a></th>
+                <th scope="col"><a href="https://twitter.com/{{ friend_scores.user.user_data.screen_name }}">@{{ friend_scores.user.user_data.screen_name }}</a></th>
                 <td>English</td>
                 <td>{{ friend_scores.display_scores.english.overall }}</td>
                 <td>{{ friend_scores.display_scores.english.astroturf }}</td>
@@ -104,7 +104,7 @@
               {# Majority language is not English, use get_lang_from_code to identify it #}
               {%- else -%}
               <tr>
-                <th scope="col"><a href="https://twitter.com/{{ friend_scores.user.screen_name }}">@{{ friend_scores.user.screen_name }}</a></th>
+                <th scope="col"><a href="https://twitter.com/{{ friend_scores.user.user_data.screen_name }}">@{{ friend_scores.user.user_data.screen_name }}</a></th>
                 <td>{{ get_lang_from_code(friend_scores.user.majority_lang) }}</td>
                 <td>{{ friend_scores.display_scores.universal.overall }}</td>
                 <td>{{ friend_scores.display_scores.universal.astroturf }}</td>
