@@ -66,11 +66,11 @@ def get_friends_bot_likelihood_scores(api: botometer.Botometer, friends: list) -
                 # Get friend's Twitter username (screen name)
                 friend_username = results["user"]["user_data"]["screen_name"]
                 loguru.logger.success(
-                    f"Got bot likelihood results from Botometer for friend: @{friend_username}, {friend_id}."
+                    f"Got bot likelihood results from Botometer for friend: @{friend_username}, {friend_id}"
                 )
                 # Add friend's bot likelihood results to the list
                 loguru.logger.debug(
-                    "Adding bot likelihood results for friend: {friend_username}, {friend_id} to the list."
+                    f"Adding bot likelihood results for friend: @{friend_username}, {friend_id} to the list."
                 )
                 friends_bot_likelihood_scores.append(results)
         loguru.logger.info("All friends bot likelihood scores have been collected.")
