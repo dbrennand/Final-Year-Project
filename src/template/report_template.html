@@ -85,10 +85,10 @@
           </tr>
         </thead>
         <tbody class="text-center">
-          {% for friend_scores in friends_bot_likelihood_scores %}
+          {%- for friend_scores in friends_bot_likelihood_scores -%}
               {# Check that the language is en (English) #}
               {# If so, use English scores #}
-              {% if friend_scores.user.majority_lang == "en" %}
+              {%- if friend_scores.user.majority_lang == "en" -%}
               <tr>
                 <th scope="col"><a href="https://twitter.com/{{ friend_scores.user.screen_name }}">@{{ friend_scores.user.screen_name }}</a></th>
                 <td>English</td>
@@ -102,7 +102,7 @@
               </tr>
               {# If not, use universal scores #}
               {# Majority language is not English, use get_lang_from_code to identify it #}
-              {% else %}
+              {%- else -%}
               <tr>
                 <th scope="col"><a href="https://twitter.com/{{ friend_scores.user.screen_name }}">@{{ friend_scores.user.screen_name }}</a></th>
                 <td>{{ get_lang_from_code(friend_scores.user.majority_lang) }}</td>
@@ -114,8 +114,8 @@
                 <td>{{ friend_scores.display_scores.universal.spammer }}</td>
                 <td>{{ friend_scores.display_scores.universal.other }}</td>
               </tr>
-              {% endif %}
-          {% endfor %}
+              {%- endif -%}
+          {%- endfor -%}
         </tbody>
       </table>
     </div>
