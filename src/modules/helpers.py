@@ -136,7 +136,7 @@ def get_api_creds() -> typing.Tuple[dict, dict]:
 
 
 def get_email_creds() -> dict:
-    """Get email credentials for smtplib.
+    """Get email credentials.
 
     Returns:
         dict: A dictionary containing the email credentials.
