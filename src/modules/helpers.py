@@ -348,7 +348,7 @@ def send_email_report(
             report_part.set_payload(report_attachment.read())
     except OSError as err:
         loguru.logger.exception(
-            "Failed to open report at path: {report_file_path}.\n{err}"
+            f"Failed to open report at path: {report_file_path}.\n{err}"
         )
 
     # Base64 encode report_part to be attached to the email multipart message
