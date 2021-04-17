@@ -22,7 +22,9 @@ def parse_args() -> argparse.Namespace:
         description="Generates and emails a report containing bot likelihood scores for a Twitter user's friends."
     )
     # Add arguments to parser
-    parser.add_argument("username", type=str, help="The Twitter username to obtain friends for.")
+    parser.add_argument(
+        "username", type=str, help="The Twitter username to obtain friends for."
+    )
     parser.add_argument(
         "email", type=str, help="The recipient email address to send the report to."
     )
