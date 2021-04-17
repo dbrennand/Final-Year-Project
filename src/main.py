@@ -23,7 +23,9 @@ def parse_args() -> argparse.Namespace:
     )
     # Add arguments to parser
     parser.add_argument("username", help="The Twitter username to obtain friends for.")
-    parser.add_argument("email", help="The email address to send the report to.")
+    parser.add_argument(
+        "email", help="The recipient email address to send the report to."
+    )
     # Parse arguments and return
     return parser.parse_args()
 
@@ -37,23 +39,23 @@ if __name__ == "__main__":
     # Parse CLI arguments
     args = parse_args()
     # Log username and email arguments
-    loguru.logger.info("Username: @{args.username} Email: {args.email}")
+    loguru.logger.info(
+        f"Arguments - Username: @{args.username}, Recipient Email Address: {args.email}"
+    )
     # Authenticate to the Twitter API (using Tweepy) and Botometer API (using botometer-python)
     twitter_api = twtr.auth(twitter_api_creds=twitter_api_creds)
     botometer_api = botm.auth(botometer_api_creds=botometer_api_creds)
     # Get a list of the Twitter user's friends IDs
     friends_ids = twtr.get_friends_ids(api=twitter_api, username=args.username)
-    # Get a list of the Twitter user's friends bot likelihood scores
-    friends_bot_likelihood_scores = botm.get_friends_bot_likelihood_scores(
-        api=botometer_api, friends=friends_ids
-    )
+    # Log friends IDs collected for debug purposes
+    loguru.logger.debug(f"Collected friends IDs: {friends_ids}")
     # Render friends bot likelihood report from the template
     report_render = helpers.render_report(
         username=args.username,
         friends_bot_likelihood_scores=friends_bot_likelihood_scores,
     )
     # Dump the friends bot likelihood report to a file in the reports directory
-    # If the reports directory does not exist, it is created
+    # If the reports directory does not exist, create it
     report_file_path = helpers.dump_report(
         report_render=report_render, username=args.username
     )
