@@ -49,6 +49,10 @@ if __name__ == "__main__":
     botometer_api = botm.auth(botometer_api_creds=botometer_api_creds)
     # Get a list of the Twitter user's friends IDs
     friends_ids = twtr.get_friends_ids(api=twitter_api, username=args.username)
+    # Get a list of the Twitter user's friends bot likelihood scores
+    friends_bot_likelihood_scores = botm.get_friends_bot_likelihood_scores(
+        api=botometer_api, friends=friends_ids
+    )
     # Log friends IDs collected for debug purposes
     loguru.logger.debug(f"Collected friends IDs: {friends_ids}")
     # Render friends bot likelihood report from the template
