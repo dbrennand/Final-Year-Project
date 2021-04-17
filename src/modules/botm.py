@@ -63,6 +63,10 @@ def get_friends_bot_likelihood_scores(api: botometer.Botometer, friends: list) -
             # Got a successful response for this friend from the Botometer API
             else:
                 # Example JSON response: https://github.com/IUNetSci/botometer-python#botometer-v4
+                # Drop cap and raw_scores keys and values from the dictionary
+                # As they are not required and to save memory
+                results.pop("cap")
+                results.pop("raw_scores")
                 # Get friend's Twitter username (screen name)
                 friend_username = results["user"]["user_data"]["screen_name"]
                 loguru.logger.success(
