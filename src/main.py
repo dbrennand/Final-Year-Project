@@ -71,10 +71,13 @@ if __name__ == "__main__":
     )
     # Log friends IDs collected for debug purposes
     loguru.logger.debug(f"Collected friends IDs: {friends_ids}")
+    # Get current datetime string to be used for the report render
+    datetime_str = helpers.get_datetime()
     # Render friends bot likelihood report from the template
     report_render = helpers.render_report(
         username=args.username,
         friends_bot_likelihood_scores=friends_bot_likelihood_scores,
+        datetime_str=datetime_str,
     )
     # Dump the friends bot likelihood report to a file in the reports directory
     # If the reports directory does not exist, create it
