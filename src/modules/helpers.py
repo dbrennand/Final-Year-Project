@@ -143,7 +143,7 @@ def get_lang_from_code(lang_code: str) -> str:
         return "Unknown"
 
 
-def create_report_dir(reports_dir: str = f"{os.getcwd()}/src/reports") -> str:
+def create_reports_dir(reports_dir: str = f"{os.getcwd()}/src/reports") -> str:
     """Create a directory called "reports" to store the friends bot likelihood report(s).
 
     NOTE: This function is called in `dump_report`.
