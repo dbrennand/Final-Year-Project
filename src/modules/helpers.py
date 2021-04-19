@@ -166,12 +166,9 @@ def create_reports_dir(reports_dir: str = f"{os.getcwd()}/src/reports") -> str:
         try:
             os.mkdir(reports_dir)
         except OSError as err:
-            loguru.logger.warning(
-                f"Failed to create reports directory at path: {reports_dir}"
+            loguru.logger.exception(
+                f"Failed to create reports directory at path: {reports_dir}.\n{err}"
             )
-            # Raise the OSError exception
-            # This exception should be caught when the function is called
-            raise err
     else:
         loguru.logger.debug(f"Reports directory at path: {reports_dir} already exists.")
     return reports_dir
