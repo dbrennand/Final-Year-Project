@@ -162,7 +162,7 @@ def create_reports_dir(reports_dir: str = f"{os.getcwd()}/src/reports") -> str:
         )
         try:
             os.mkdir(reports_dir)
-        except OSError as err:
+        except FileNotFoundError as err:
             loguru.logger.exception(
                 f"Failed to create reports directory at path: {reports_dir}.\n{err}"
             )
