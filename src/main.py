@@ -79,10 +79,13 @@ if __name__ == "__main__":
         friends_bot_likelihood_scores=friends_bot_likelihood_scores,
         datetime_str=datetime_str,
     )
+    # Create reports directory to dump the friends bot likelihood report to
+    reports_dir = helpers.create_reports_dir()
     # Dump the friends bot likelihood report to a file in the reports directory
-    # If the reports directory does not exist, create it
     report_file_path = helpers.dump_report(
-        report_render=report_render, username=args.username
+        report_render=report_render,
+        reports_dir=reports_dir,
+        username=args.username,
     )
     # Finally, send the email with the friends bot likelihood report attached
     helpers.send_email_report(
