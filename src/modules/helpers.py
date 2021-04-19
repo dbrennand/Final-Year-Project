@@ -110,7 +110,7 @@ def get_datetime() -> str:
     NOTE: The datetime library uses the operating system's configured timezone.
 
     Returns:
-        str: A string formatted like: "05/04/2021 at 13:04:15".
+        str: A string formatted with the current date and time like: "05/04/2021 at 13:04:15".
     """
     loguru.logger.info("Getting current datetime string.")
     datetime_str = datetime.datetime.now().strftime("%d/%m/%Y at %H:%M:%S")
