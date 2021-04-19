@@ -35,19 +35,16 @@ def parse_args() -> argparse.Namespace:
 if __name__ == "__main__":
     # Initialise logging
     helpers.init_log_handler()
-    # Get API credentials
-    api_creds = helpers.get_env_vars(
-        ["TWITTER_API_KEY", "TWITTER_API_SECRET", "BOTOMETER_API_KEY"]
-    )
-    # Get email credentials
-    email_creds = helpers.get_env_vars(
-        [
-            "EMAIL_SERVER_DOMAIN",
-            "EMAIL_SERVER_PORT",
-            "EMAIL_SENDER_ADDRESS",
-            "EMAIL_SENDER_PASSWORD",
-        ]
-    )
+    # Get API and email credentials
+    creds = helpers.get_env_vars([
+        "TWITTER_API_KEY",
+        "TWITTER_API_SECRET",
+        "BOTOMETER_API_KEY",
+        "EMAIL_SERVER_DOMAIN",
+        "EMAIL_SERVER_PORT",
+        "EMAIL_SENDER_ADDRESS",
+        "EMAIL_SENDER_PASSWORD",
+    ])
     # Parse CLI arguments
     args = parse_args()
     # Log username and email arguments
@@ -55,8 +52,15 @@ if __name__ == "__main__":
         f"Arguments - Username: @{args.username}, Recipient Email Address: {args.email}"
     )
     # Authenticate to the Twitter API (using Tweepy) and Botometer API (using botometer-python)
-    twitter_api = twtr.auth(twitter_api_creds=twitter_api_creds)
-    botometer_api = botm.auth(botometer_api_creds=botometer_api_creds)
+    twitter_api = twtr.auth(
+        consumer_key=creds["TWITTER_API_KEY"],
+        consumer_secret=creds["TWITTER_API_SECRET"],
+    )
+    botometer_api = botm.auth(
+        api_key=creds["BOTOMETER_API_KEY"],
+        consumer_key=creds["TWITTER_API_KEY"],
+        consumer_secret=creds["TWITTER_API_SECRET"],
+    )
     # Get a list of the Twitter user's friends IDs
     friends_ids = twtr.get_friends_ids(api=twitter_api, username=args.username)
     # Get a list of the Twitter user's friends bot likelihood scores
@@ -77,10 +81,10 @@ if __name__ == "__main__":
     )
     # Finally, send the email with the friends bot likelihood report attached
     helpers.send_email_report(
-        email_server=email_creds["EMAIL_SERVER_DOMAIN"],
-        email_server_port=int(email_creds["EMAIL_SERVER_PORT"]),
-        email_sender_addr=email_creds["EMAIL_SENDER_ADDRESS"],
-        email_sender_pass=email_creds["EMAIL_SENDER_PASSWORD"],
+        email_server=creds["EMAIL_SERVER_DOMAIN"],
+        email_server_port=int(creds["EMAIL_SERVER_PORT"]),
+        email_sender_addr=creds["EMAIL_SENDER_ADDRESS"],
+        email_sender_pass=creds["EMAIL_SENDER_PASSWORD"],
         email_recipient_addr=args.email,
         report_file_path=report_file_path,
         username=args.username,
