@@ -182,6 +182,7 @@ def create_reports_dir(reports_dir: str = f"{os.getcwd()}/src/reports") -> str:
 def render_report(
     username: str,
     friends_bot_likelihood_scores: list,
+    datetime_str: str,
     template_dir: str = f"{os.getcwd()}/src/template",
 ) -> str:
     """Render the friends bot likelihood report from a template using the Jinja2 templating engine.
@@ -193,6 +194,7 @@ def render_report(
     Args:
         username (str): The username of the Twitter account the report has been generated for.
         friends_bot_likelihood_scores (list): A list of bot likelihood scores from the Botometer API for Twitter friends.
+        datetime_str (str): A string containing the current date and time (see get_datetime() function).
         template_dir (str, optional): The directory to look for the report template. Defaults to "{os.getcwd()}/src/template".
 
     Returns:
@@ -207,8 +209,6 @@ def render_report(
     environment.globals["get_lang_from_code"] = get_lang_from_code
     # Get the report template
     report_template = environment.get_template(name="report_template.html")
-    # Get datetime formatted string to be provided to the template
-    datetime_str = get_datetime()
     # Render report from template
     # Providing data to be used in the template
     loguru.logger.info("Rendering report from template.")
