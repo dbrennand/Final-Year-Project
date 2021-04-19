@@ -226,18 +226,14 @@ def dump_report(report_render: str, username: str) -> str:
 
     Args:
         report_render (str): A unicode formatted string of the rendered report.
+        reports_dir (str): The absolute or relative path to the reports directory.
         username (str): The username of the Twitter account the report has been generated for.
 
     Returns:
-        str: The full path to the friends bot likelihood report.
+        str: The absolute or relative path to the friends bot likelihood report.
     """
-    # Ensure the reports directory is created to dump the report
-    try:
-        reports_dir = create_reports_dir()
-    except OSError as err:
-        loguru.logger.debug(f"Report render dump:\n{report_render}")
-        loguru.logger.exception(f"Failed to create reports directory.\n{err}")
-    # Create report full path
+    # Create report absolute or relative path
+    # Depending on the path provided by the reports_dir parameter
     report_file_path = f"{reports_dir}/@{username}_friends_bot_likelihood_report.html"
     # Dump the report render to a file in the reports directory
     try:
