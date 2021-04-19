@@ -61,7 +61,7 @@ def get_friends_bot_likelihood_scores(api: botometer.Botometer, friends: list) -
                 # Error message has been returned as the result
                 # Log a warning message
                 loguru.logger.warning(
-                    f"Botometer returned the following error for friend: {friend_id}.\n{error_msg}"
+                    f"Botometer returned the following error for friend with ID: {friend_id}.\n{error_msg}"
                 )
             # Got a successful response for this friend from the Botometer API
             else:
