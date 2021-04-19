@@ -152,9 +152,6 @@ def create_reports_dir(reports_dir: str = f"{os.getcwd()}/src/reports") -> str:
         reports_dir (str, optional): The absolute or relative path to the reports
             directory to be created. Defaults to f"{os.getcwd()}/src/reports".
 
-    Raises:
-        err: Raises OSError when the directory fails to be created.
-
     Returns:
         str: The absolute or relative path to the reports directory.
     """
