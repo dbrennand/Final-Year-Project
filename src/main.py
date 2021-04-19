@@ -36,15 +36,17 @@ if __name__ == "__main__":
     # Initialise logging
     helpers.init_log_handler()
     # Get API and email credentials
-    creds = helpers.get_env_vars([
-        "TWITTER_API_KEY",
-        "TWITTER_API_SECRET",
-        "BOTOMETER_API_KEY",
-        "EMAIL_SERVER_DOMAIN",
-        "EMAIL_SERVER_PORT",
-        "EMAIL_SENDER_ADDRESS",
-        "EMAIL_SENDER_PASSWORD",
-    ])
+    creds = helpers.get_env_vars(
+        [
+            "TWITTER_API_KEY",
+            "TWITTER_API_SECRET",
+            "BOTOMETER_API_KEY",
+            "EMAIL_SERVER_DOMAIN",
+            "EMAIL_SERVER_PORT",
+            "EMAIL_SENDER_ADDRESS",
+            "EMAIL_SENDER_PASSWORD",
+        ]
+    )
     # Parse CLI arguments
     args = parse_args()
     # Log username and email arguments
