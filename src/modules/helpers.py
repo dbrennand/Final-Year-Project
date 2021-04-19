@@ -104,55 +104,6 @@ def get_env_vars(env_vars: list) -> dict:
     return env_vars_dict
 
 
-def get_api_creds() -> typing.Tuple[dict, dict]:
-    """Get API credentials for the Tweepy and Botometer constructors.
-
-    Returns:
-        typing.Tuple[dict, dict]: A tuple containing two dictionaries.
-            Dictionary 1: Contains credentials for the Tweepy constructor.
-            Dictionary 2: Contains credentials for the Botometer constructor.
-
-    Note:
-        Each dictionary can be passed directly to the constructor.
-    """
-    loguru.logger.info("Getting API credentials.")
-    # Get Twitter and Botometer API credentials from environment variables
-    api_env_dict = get_env_vars(
-        ["TWITTER_API_KEY", "TWITTER_API_SECRET", "BOTOMETER_API_KEY"]
-    )
-    # Create dictionary containing credentials for Tweepy constructor
-    twitter_api_creds = {
-        "consumer_key": api_env_dict["TWITTER_API_KEY"],
-        "consumer_secret": api_env_dict["TWITTER_API_SECRET"],
-    }
-    # Create dictionary containing credentials for Botometer constructor
-    botometer_api_creds = {
-        "rapidapi_key": api_env_dict["BOTOMETER_API_KEY"],
-        "consumer_key": api_env_dict["TWITTER_API_KEY"],
-        "consumer_secret": api_env_dict["TWITTER_API_SECRET"],
-    }
-    # Return a tuple containing the two dictionaries
-    return twitter_api_creds, botometer_api_creds
-
-
-def get_email_creds() -> dict:
-    """Get email credentials.
-
-    Returns:
-        dict: A dictionary containing the email credentials.
-    """
-    loguru.logger.info("Getting email credentials.")
-    # Get email credentials from environment variables
-    return get_env_vars(
-        [
-            "EMAIL_SERVER_DOMAIN",
-            "EMAIL_SERVER_PORT",
-            "EMAIL_SENDER_ADDRESS",
-            "EMAIL_SENDER_PASSWORD",
-        ]
-    )
-
-
 def get_datetime() -> str:
     """Get the current datetime as a formatted string.
 
