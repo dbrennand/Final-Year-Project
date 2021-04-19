@@ -262,7 +262,7 @@ def send_email_report(
         email_sender_addr (str): The email address of the sender.
         email_sender_pass (str): The senders email password used to authenticate to the email server.
         email_recipient_addr (str): The recipient email address to send the report to.
-        report_file_path (str): The path of the friends bot likelihood report to be attached to the email.
+        report_file_path (str): The absolute or relative path to the friends bot likelihood report.
         username (str): The username of the Twitter account the report has been generated for.
 
     Returns:
@@ -280,7 +280,7 @@ def send_email_report(
     # Attach email body text to the email multipart message
     message.attach(MIMEText(email_body_text, "plain"))
 
-    # Open the bot likelihood report file to be attached to the email
+    # Open the friends bot likelihood report file to be attached to the email
     try:
         with open(report_file_path, "rb") as report_attachment:
             # Create report_part to include the report as an attachment
