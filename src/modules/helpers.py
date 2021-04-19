@@ -221,7 +221,7 @@ def render_report(
     return report_render
 
 
-def dump_report(report_render: str, username: str) -> str:
+def dump_report(report_render: str, reports_dir: str, username: str) -> str:
     """Dump the rendered friends bot likelihood report to a file.
 
     Args:
