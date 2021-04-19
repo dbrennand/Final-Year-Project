@@ -35,9 +35,19 @@ def parse_args() -> argparse.Namespace:
 if __name__ == "__main__":
     # Initialise logging
     helpers.init_log_handler()
-    # Get API and email credentials
-    twitter_api_creds, botometer_api_creds = helpers.get_api_creds()
-    email_creds = helpers.get_email_creds()
+    # Get API credentials
+    api_creds = helpers.get_env_vars(
+        ["TWITTER_API_KEY", "TWITTER_API_SECRET", "BOTOMETER_API_KEY"]
+    )
+    # Get email credentials
+    email_creds = helpers.get_env_vars(
+        [
+            "EMAIL_SERVER_DOMAIN",
+            "EMAIL_SERVER_PORT",
+            "EMAIL_SENDER_ADDRESS",
+            "EMAIL_SENDER_PASSWORD",
+        ]
+    )
     # Parse CLI arguments
     args = parse_args()
     # Log username and email arguments
