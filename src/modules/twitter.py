@@ -4,21 +4,23 @@ import tweepy
 import loguru
 
 
-def auth(twitter_api_creds: dict) -> tweepy.API:
+def auth(consumer_key: str, consumer_secret: str) -> tweepy.API:
     """Authenticate to the Twitter API using Tweepy.
 
     https://docs.tweepy.org/en/latest/api.html#tweepy.API
 
     Args:
-        twitter_api_creds (dict): A dictionary containing the Twitter application API credentials.
-            Credentials are the API key and secret (also known as consumer key and secret respectively).
+        consumer_key (str): A string containing the Twitter API consumer key.
+        consumer_secret (str): A string containing the Twitter API consumer secret.
 
     Returns:
         tweepy.API: A Tweepy.API object authenticated to the Twitter API.
     """
     loguru.logger.info("Authenticating to the Twitter API.")
     # Initialise Tweepy application authentication flow
-    auth = tweepy.AppAuthHandler(**twitter_api_creds)
+    auth = tweepy.AppAuthHandler(
+        consumer_key=consumer_key, consumer_secret=consumer_secret
+    )
     # Create and return an authenticated Tweepy API object
     # Retry 2 times if a request fails with a 3 second delay between retries
     # Wait if the application hits the Twitter API rate limit
