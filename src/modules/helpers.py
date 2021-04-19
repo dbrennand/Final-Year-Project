@@ -232,7 +232,7 @@ def dump_report(report_render: str, username: str) -> str:
     """
     # Ensure the reports directory is created to dump the report
     try:
-        reports_dir = create_report_dir()
+        reports_dir = create_reports_dir()
     except OSError as err:
         loguru.logger.debug(f"Report render dump:\n{report_render}")
         loguru.logger.exception(f"Failed to create reports directory.\n{err}")
