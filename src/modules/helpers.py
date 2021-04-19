@@ -139,7 +139,7 @@ def get_lang_from_code(lang_code: str) -> str:
         return language.name
     # If not, return "Unknown"
     else:
-        loguru.logger.debug(f"Language name for code: {lang_code} unknown.")
+        loguru.logger.debug(f"Language name for code: {lang_code} is unknown.")
         return "Unknown"
 
 
