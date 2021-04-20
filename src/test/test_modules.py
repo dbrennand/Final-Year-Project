@@ -12,9 +12,7 @@ from modules import helpers
 from modules import twitter as twtr
 
 
-@pytest.fixture
-def username() -> str:
-    return "dbrennanduk"
+# See conftest.py for username and email fixtures
 
 
 @pytest.fixture
@@ -389,3 +387,42 @@ def test_dump_report(
     )
     # Check the report render was dumped to a file
     assert os.path.exists(report_file_path)
+
+
+@pytest.mark.email
+def test_send_email_report(
+    env_vars,
+    reports_test_dir,
+    friends_bot_likelihood_scores,
+    _get_datetime,
+    email,
+    username,
+    caplog,
+):
+    creds = helpers.get_env_vars(env_vars)
+    # Create reports test directory
+    reports_dir = helpers.create_reports_dir(reports_dir=reports_test_dir)
+    # Render the friends bot likelihood report from the template
+    report_render = helpers.render_report(
+        username=username,
+        friends_bot_likelihood_scores=friends_bot_likelihood_scores,
+        datetime_str=_get_datetime,
+    )
+    # Dump report render to a file in the reports directory
+    report_file_path = helpers.dump_report(
+        report_render=report_render, reports_dir=reports_dir, username=username
+    )
+    # Send email with report attached
+    helpers.send_email_report(
+        email_server=creds["EMAIL_SERVER_DOMAIN"],
+        email_server_port=int(creds["EMAIL_SERVER_PORT"]),
+        email_sender_addr=creds["EMAIL_SENDER_ADDRESS"],
+        email_sender_pass=creds["EMAIL_SENDER_PASSWORD"],
+        email_recipient_addr=email,
+        report_file_path=report_file_path,
+        username=username,
+    )
+    assert (
+        f"Sent email to: {email} with the friends bot likelihood report attached."
+        in caplog.text
+    )
