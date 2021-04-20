@@ -3,6 +3,9 @@
 import botometer
 import loguru
 
+# Local import
+import modules.helpers as helpers
+
 
 def auth(api_key: str, consumer_key: str, consumer_secret: str) -> botometer.Botometer:
     """Authenticate to the Botometer API using botometer-python.
@@ -80,8 +83,16 @@ def get_friends_bot_likelihood_scores(api: botometer.Botometer, friends: list) -
                     f"Adding bot likelihood results for friend: @{friend_username}, {friend_id} to the list."
                 )
                 friends_bot_likelihood_scores.append(results)
-        loguru.logger.info("All friends bot likelihood scores have been collected.")
-        return friends_bot_likelihood_scores
+        # Check if the list has one or more results
+        if helpers.check_list_populated(_list=friends_bot_likelihood_scores):
+            # The list contains at least one or more results
+            loguru.logger.debug(
+                "The friends bot likelihood scores list has one or more results."
+            )
+            return friends_bot_likelihood_scores
+        else:
+            # The list contains no results, log a terminating error
+            loguru.logger.exception("Failed to get any friends bot likelihood results.")
     # The `check_accounts_in` method can raise the following exceptions once all retires have been exhausted:
     # requests: ConnectionError, HTTPError, Timeout
     ## https://github.com/IUNetSci/botometer-python/blob/master/botometer/__init__.py#L159
@@ -98,12 +109,11 @@ def get_friends_bot_likelihood_scores(api: botometer.Botometer, friends: list) -
         loguru.logger.warning(
             f"An exception occurred: {err} and all retries to Botometer have been exhausted."
         )
-        loguru.logger.debug(
-            "Checking if the friends bot likelihood scores list has at least one result."
-        )
-        if len(friends_bot_likelihood_scores) >= 1:
+        # Check if the list has one or more results
+        if helpers.check_list_populated(_list=friends_bot_likelihood_scores):
+            # The list contains at least one or more results
             loguru.logger.debug(
-                "Friends bot likelihood scores list has at least one result."
+                "The friends bot likelihood scores list has one or more results."
             )
             return friends_bot_likelihood_scores
         else:
