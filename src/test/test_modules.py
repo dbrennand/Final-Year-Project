@@ -2,6 +2,7 @@
 """
 import pytest
 import os
+import shutil
 import botometer
 import tweepy
 
@@ -83,12 +84,12 @@ def reports_test_dir(request) -> str:
     # to be created in the relevant tests
     reports_test_dir_path = "./src/test/reports"
     # Add finalizer function to remove reports test directory
-    # once the test has finished
-    def remove_reports_dir():
-        os.rmdir(reports_test_dir_path)
+    # and its contents once the test has finished
+    def remove_reports_dir_contents():
+        shutil.rmtree(reports_test_dir_path)
 
     # Add finalizer function
-    request.addfinalizer(remove_reports_dir)
+    request.addfinalizer(remove_reports_dir_contents)
     return reports_test_dir_path
 
 
@@ -212,6 +213,7 @@ def test_get_lang_from_code(lang_code, expected_result):
 
 @pytest.mark.utility
 def test_create_reports_dir(reports_test_dir):
+    # Create reports test directory
     reports_dir = helpers.create_reports_dir(reports_dir=reports_test_dir)
     # Check that the directory has been created
     # and the returned path is the same provided
@@ -310,24 +312,11 @@ def test_get_friends_ids_err_no_friends(twitter_auth, caplog):
     )
 
 
-@pytest.mark.parametrize(
-    "username, friends_bot_likelihood_scores, datetime_str, expected_result",
-    [
-        # Provide all values
-        (username, friends_bot_likelihood_scores, _get_datetime, str),
-        # Provide only friends_bot_likelihood_scores and datetime_str
-        ("", friends_bot_likelihood_scores, _get_datetime, str),
-        # Provide only username and datetime_str
-        (username, {}, _get_datetime, str),
-        # Provide only username and  friends_bot_likelihood_scores
-        (username, friends_bot_likelihood_scores, "", str),
-    ],
-)
+# Cannot parameterize these tests due to: https://github.com/pytest-dev/pytest/issues/349
+
+
 @pytest.mark.report
-def test_render_report_type(
-    username, friends_bot_likelihood_scores, datetime_str, expected_result
-):
-    # Not working currently
+def test_render_report(username, friends_bot_likelihood_scores, _get_datetime):
     assert (
         type(
             helpers.render_report(
@@ -336,5 +325,67 @@ def test_render_report_type(
                 datetime_str=_get_datetime,
             )
         )
-        == expected_result
+        == str
     )
+
+
+@pytest.mark.report
+def test_render_report_no_username(friends_bot_likelihood_scores, _get_datetime):
+    assert (
+        type(
+            helpers.render_report(
+                username="",
+                friends_bot_likelihood_scores=friends_bot_likelihood_scores,
+                datetime_str=_get_datetime,
+            )
+        )
+        == str
+    )
+
+
+@pytest.mark.report
+def test_render_report_no_scores(username, _get_datetime):
+    assert (
+        type(
+            helpers.render_report(
+                username=username,
+                friends_bot_likelihood_scores={},
+                datetime_str=_get_datetime,
+            )
+        )
+        == str
+    )
+
+
+@pytest.mark.report
+def test_render_report_no_datetime(username, friends_bot_likelihood_scores):
+    assert (
+        type(
+            helpers.render_report(
+                username=username,
+                friends_bot_likelihood_scores=friends_bot_likelihood_scores,
+                datetime_str="",
+            )
+        )
+        == str
+    )
+
+
+@pytest.mark.report
+def test_dump_report(
+    reports_test_dir, username, friends_bot_likelihood_scores, _get_datetime
+):
+    # Create reports test directory
+    reports_dir = helpers.create_reports_dir(reports_dir=reports_test_dir)
+    # Render the friends bot likelihood report from the template
+    report_render = helpers.render_report(
+        username=username,
+        friends_bot_likelihood_scores=friends_bot_likelihood_scores,
+        datetime_str=_get_datetime,
+    )
+    # Dump report render to a file in the reports directory
+    report_file_path = helpers.dump_report(
+        report_render=report_render, reports_dir=reports_dir, username=username
+    )
+    # Check the report render was dumped to a file
+    assert os.path.exists(report_file_path)
