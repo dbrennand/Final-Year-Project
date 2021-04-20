@@ -20,6 +20,6 @@ To run the unit tests:
 
 > [!NOTE]
 >
-> You can choose to run unit tests with a specific marker like so (runs only tests with "twitter" mark): `pytest -m twitter`
+> You can choose to run unit tests with a specific marker like so (runs only tests with the "twitter" mark): `pytest -m twitter`
 >
 > You can also exclude a specific group of unit tests using markers. See [pytest.ini](../../pytest.ini) for available markers.
