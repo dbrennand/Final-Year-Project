@@ -3,9 +3,6 @@
 import botometer
 import loguru
 
-# Local import
-import modules.helpers as helpers
-
 
 def auth(api_key: str, consumer_key: str, consumer_secret: str) -> botometer.Botometer:
     """Authenticate to the Botometer API using botometer-python.
@@ -84,7 +81,7 @@ def get_friends_bot_likelihood_scores(api: botometer.Botometer, friends: list) -
                 )
                 friends_bot_likelihood_scores.append(results)
         # Check if the list has one or more results
-        if helpers.check_list_populated(_list=friends_bot_likelihood_scores):
+        if bool(friends_bot_likelihood_scores):
             # The list contains at least one or more results
             loguru.logger.debug(
                 "The friends bot likelihood scores list has one or more results."
@@ -110,7 +107,7 @@ def get_friends_bot_likelihood_scores(api: botometer.Botometer, friends: list) -
             f"An exception occurred: {err} and all retries to Botometer have been exhausted."
         )
         # Check if the list has one or more results
-        if helpers.check_list_populated(_list=friends_bot_likelihood_scores):
+        if bool(friends_bot_likelihood_scores):
             # The list contains at least one or more results
             loguru.logger.debug(
                 "The friends bot likelihood scores list has one or more results."

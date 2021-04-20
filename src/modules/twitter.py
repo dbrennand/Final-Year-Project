@@ -3,9 +3,6 @@
 import tweepy
 import loguru
 
-# Local import
-import modules.helpers as helpers
-
 
 def auth(consumer_key: str, consumer_secret: str) -> tweepy.API:
     """Authenticate to the Twitter API using Tweepy.
@@ -65,12 +62,12 @@ def get_friends_ids(api: tweepy.API, username: str) -> list:
             f"Failed to get @{username}'s Twitter friends IDs.\n{err}"
         )
     # Check if the list has one or more results
-    if helpers.check_list_populated(_list=friends_ids_list):
+    if bool(friends_ids_list):
         # The list contains at least one or more results
         loguru.logger.debug("One or more friends IDs were found.")
         return friends_ids_list
     else:
         # The list contains no results, log a terminating error
         loguru.logger.exception(
-            f"Failed to get any friends IDs for @{username}. It is likely that their account does not have any friends."
+            f"Failed to get any friends IDs for @{username}. It is likely that the account does not have any friends."
         )
