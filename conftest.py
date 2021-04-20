@@ -37,7 +37,7 @@ def caplog(_caplog):
 
 def pytest_addoption(parser):
     parser.addoption("--email", action="store")
-    parser.addoption("--username", action="store", default="dbrennanduk")
+    parser.addoption("--username", action="store")
 
 
 @pytest.fixture
