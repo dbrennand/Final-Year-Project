@@ -7,7 +7,7 @@ The following code configures:
 2. Configure pytest's caplog fixture to be able to capture Loguru log messages.
         Code taken from: https://loguru.readthedocs.io/en/stable/resources/migration.html#making-things-work-with-pytest-and-caplog
 
-3. Add --email (required) and --username (optional) CLI options to pytest.
+3. Add --email and --username (required) CLI options to pytest.
 """
 import logging
 import pytest
