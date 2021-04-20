@@ -3,6 +3,9 @@
 import tweepy
 import loguru
 
+# Local import
+import modules.helpers as helpers
+
 
 def auth(consumer_key: str, consumer_secret: str) -> tweepy.API:
     """Authenticate to the Twitter API using Tweepy.
@@ -42,7 +45,8 @@ def get_friends_ids(api: tweepy.API, username: str) -> list:
         list: A list containing all of the specified user's friends. Represented as IDs.
 
     Notes:
-        Using `api.friends_ids` method over `api.friends` because it provides 5000 results per 15 minute rate limit (5000/15mins) window vs the latter's 200/15mins.
+        Using `api.friends_ids` method over `api.friends` because it provides greater API results before hitting the rate limit.
+            See: https://github.com/tweepy/tweepy/issues/1431
     """
     loguru.logger.info(f"Getting @{username}'s Twitter friends IDs.")
     # Initialise friends IDs list
@@ -51,9 +55,22 @@ def get_friends_ids(api: tweepy.API, username: str) -> list:
     # Use Tweepy's Cursor class to interate over all friends IDs on every page
     # Get the maximum number of friends IDs in a single request (5000)
     try:
-        for friend_id in tweepy.Cursor(api.friends_ids, screen_name=username, count=5000).items():
+        for friend_id in tweepy.Cursor(
+            api.friends_ids, screen_name=username, count=5000
+        ).items():
             loguru.logger.debug(f"Found friend with ID: {friend_id}")
             friends_ids_list.append(friend_id)
     except tweepy.TweepError as err:
-        loguru.logger.exception(f"Failed to get @{username}'s Twitter friends.\n{err}")
-    return friends_ids_list
+        loguru.logger.exception(
+            f"Failed to get @{username}'s Twitter friends IDs.\n{err}"
+        )
+    # Check if the list has one or more results
+    if helpers.check_list_populated(_list=friends_ids_list):
+        # The list contains at least one or more results
+        loguru.logger.debug("One or more friends IDs were found.")
+        return friends_ids_list
+    else:
+        # The list contains no results, log a terminating error
+        loguru.logger.exception(
+            f"Failed to get any friends IDs for @{username}. It is likely that their account does not have any friends."
+        )
