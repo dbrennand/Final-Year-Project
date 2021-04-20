@@ -171,6 +171,21 @@ def create_reports_dir(reports_dir: str = f"{os.getcwd()}/src/reports") -> str:
     return reports_dir
 
 
+def check_list_populated(_list: list) -> bool:
+    """Check whether a list contains one or more items.
+
+    Args:
+        _list (list): A list to check whether it contains one or more items.
+
+    Returns:
+        bool: Returns True if the list has one or more items. Otherwise, returns False.
+    """
+    loguru.logger.debug("Checking if the list provided has one or more items.")
+    # If the list is empty it will return False
+    # Otherwise, returns True
+    return bool(_list)
+
+
 # Report functions
 
 
