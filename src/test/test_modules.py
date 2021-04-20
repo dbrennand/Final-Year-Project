@@ -187,7 +187,7 @@ def test_get_env_vars_error(caplog):
 def test_get_datetime(_get_datetime):
     # Check that a string was returned
     # and that "at" is present in the string
-    assert (type(datetime_str) == str) and ("at" in datetime_str)
+    assert (type(_get_datetime) == str) and ("at" in _get_datetime)
 
 
 @pytest.mark.parametrize(
