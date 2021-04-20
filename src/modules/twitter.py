@@ -49,8 +49,9 @@ def get_friends_ids(api: tweepy.API, username: str) -> list:
     friends_ids_list = []
     # The Twitter API returns results in pages
     # Use Tweepy's Cursor class to interate over all friends IDs on every page
+    # Get the maximum number of friends IDs in a single request (5000)
     try:
-        for friend_id in tweepy.Cursor(api.friends_ids, screen_name=username).items():
+        for friend_id in tweepy.Cursor(api.friends_ids, screen_name=username, count=5000).items():
             loguru.logger.debug(f"Found friend with ID: {friend_id}")
             friends_ids_list.append(friend_id)
     except tweepy.TweepError as err:
