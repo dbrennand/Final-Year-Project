@@ -65,12 +65,12 @@ if __name__ == "__main__":
     )
     # Get a list of the Twitter user's friends IDs
     friends_ids = twtr.get_friends_ids(api=twitter_api, username=args.username)
+    # Log friends IDs collected for debug purposes
+    loguru.logger.debug(f"Collected friends IDs: {friends_ids}")
     # Get a list of the Twitter user's friends bot likelihood scores
     friends_bot_likelihood_scores = botm.get_friends_bot_likelihood_scores(
         api=botometer_api, friends=friends_ids
     )
-    # Log friends IDs collected for debug purposes
-    loguru.logger.debug(f"Collected friends IDs: {friends_ids}")
     # Get current datetime string to be used for the report render
     datetime_str = helpers.get_datetime()
     # Render friends bot likelihood report from the template
