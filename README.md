@@ -117,47 +117,45 @@ The app password will be shown. Store it somewhere safe as it will be needed in 
 
 Once all the credentials have been collected, export them as environment variables to be accessed by the project's application.
 
-Use the relevant platform specific instructions below:
+1. Temporarily disable terminal command logging to prevent credential exposure:
 
-#### Linux
+    * Linux: `set +o history`
 
-1. Temporarily disable terminal command logging to prevent credential exposure: `set +o history`
+    > [!NOTE]
+    >
+    > Use the command: `set -o history` to re-enable terminal command logging.
 
-> [!NOTE]
->
-> Use the command: `set -o history` to re-enable terminal command logging.
+    * Windows (PowerShell): `Set-PSReadlineOption -HistorySaveStyle SaveNothing`
 
-2. Export the required credentials as environment variables:
-
-    ```bash
-    export TWITTER_API_KEY="Enter your Twitter API key here."
-    export TWITTER_API_SECRET="Enter your Twitter API secret here."
-    export BOTOMETER_API_KEY="Enter your Botometer API key here."
-    export EMAIL_SERVER_DOMAIN="smtp.google.com"
-    export EMAIL_SERVER_PORT="465"
-    export EMAIL_SENDER_ADDRESS="Enter the account email address here."
-    export EMAIL_SENDER_PASSWORD="Enter the account app password here."
-    ```
-
-#### Windows (PowerShell)
-
-1. Temporarily disable terminal command logging to prevent credential exposure: `Set-PSReadlineOption -HistorySaveStyle SaveNothing`
-
-> [!NOTE]
->
-> Use the command: `Set-PSReadlineOption -HistorySaveStyle SaveIncrementally` to re-enable terminal command logging.
+    > [!NOTE]
+    >
+    > Use the command: `Set-PSReadlineOption -HistorySaveStyle SaveIncrementally` to re-enable terminal command logging.
 
 2. Export the required credentials as environment variables:
 
-    ```powershell
-    $Env:TWITTER_API_KEY="Enter your Twitter API key here."
-    $Env:TWITTER_API_SECRET="Enter your Twitter API secret here."
-    $Env:BOTOMETER_API_KEY="Enter your Botometer API key here."
-    $Env:EMAIL_SERVER_DOMAIN="smtp.google.com"
-    $Env:EMAIL_SERVER_PORT="465"
-    $Env:EMAIL_SENDER_ADDRESS="Enter the account email address here."
-    $Env:EMAIL_SENDER_PASSWORD="Enter the account app password here."
-    ```
+    * Linux:
+
+        ```bash
+        export TWITTER_API_KEY="Enter your Twitter API key here."
+        export TWITTER_API_SECRET="Enter your Twitter API secret here."
+        export BOTOMETER_API_KEY="Enter your Botometer API key here."
+        export EMAIL_SERVER_DOMAIN="smtp.google.com"
+        export EMAIL_SERVER_PORT="465"
+        export EMAIL_SENDER_ADDRESS="Enter the account email address here."
+        export EMAIL_SENDER_PASSWORD="Enter the account app password here."
+        ```
+
+    * Windows (PowerShell):
+
+        ```powershell
+        $Env:TWITTER_API_KEY="Enter your Twitter API key here."
+        $Env:TWITTER_API_SECRET="Enter your Twitter API secret here."
+        $Env:BOTOMETER_API_KEY="Enter your Botometer API key here."
+        $Env:EMAIL_SERVER_DOMAIN="smtp.google.com"
+        $Env:EMAIL_SERVER_PORT="465"
+        $Env:EMAIL_SENDER_ADDRESS="Enter the account email address here."
+        $Env:EMAIL_SENDER_PASSWORD="Enter the account app password here."
+        ```
 
 ## Usage
 
