@@ -173,6 +173,60 @@ From the root of the repository, run the project's application using the followi
 >
 > The above command would produce a bot likelihood report for *@dbrennanduk's* Twitter friends and send the report to *exampleemail@gmail.com*.
 
+### Docker
+
+> [!NOTE]
+>
+> These instructions assume you already have Docker installed and running on your machine.
+
+#### Linux
+
+1. Build the container image using the following command: `docker build -t fyp-app:latest .`
+
+2. Temporarily disable terminal command logging to prevent credential exposure: `set +o history`
+
+> [!NOTE]
+>
+> Use the command: `set -o history` to re-enable terminal command logging.
+
+3. From the root of the repository, run the project's application in a container using the following command:
+
+    ```bash
+    docker run --name fyp-app -t fyp-app:latest \
+        -e TWITTER_API_KEY="Enter your Twitter API key here." \
+        -e TWITTER_API_SECRET="Enter your Twitter API secret here." \
+        -e BOTOMETER_API_KEY="Enter your Botometer API key here." \
+        -e EMAIL_SERVER_DOMAIN="smtp.google.com" \
+        -e EMAIL_SERVER_PORT="465" \
+        -e EMAIL_SENDER_ADDRESS="Enter the account email address here." \
+        -e EMAIL_SENDER_PASSWORD="Enter the account app password here." \
+        python ./main.py {Twitter Username} {Email Address}
+    ```
+
+#### Windows (PowerShell)
+
+1. Build the container image using the following command: `docker build -t fyp-app:latest .`
+
+2. Temporarily disable terminal command logging to prevent credential exposure: `Set-PSReadlineOption -HistorySaveStyle SaveNothing`
+
+> [!NOTE]
+>
+> Use the command: `Set-PSReadlineOption -HistorySaveStyle SaveIncrementally` to re-enable terminal command logging.
+
+3. From the root of the repository, run the project's application in a container using the following command:
+
+    ```powershell
+    docker run --name fyp-app -t fyp-app:latest `
+        -e TWITTER_API_KEY="Enter your Twitter API key here." `
+        -e TWITTER_API_SECRET="Enter your Twitter API secret here." `
+        -e BOTOMETER_API_KEY="Enter your Botometer API key here." `
+        -e EMAIL_SERVER_DOMAIN="smtp.google.com" `
+        -e EMAIL_SERVER_PORT="465" `
+        -e EMAIL_SENDER_ADDRESS="Enter the account email address here." `
+        -e EMAIL_SENDER_PASSWORD="Enter the account app password here." `
+        python ./main.py {Twitter Username} {Email Address}
+    ```
+
 ## Unit tests
 
 See the unit tests [README](./src/test/README.md) file.
