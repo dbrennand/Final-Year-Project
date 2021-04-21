@@ -69,7 +69,7 @@ Once you have a RapidAPI account, go to the Botometer API [pricing](https://rapi
 >
 > The *Pro* plan requires a credit or debit card to be added to the RapidAPI account.
 
-Once you have chosen a plan, head to the RapidAPI [developer dashboard](https://rapidapi.com/developer/apps) and go to security for the `default-application`. The application key (API key) will be shown. Store it somewhere safe as it will be needed in the [final step](#Exporting-Credentials).
+Once you have chosen a plan, go to the RapidAPI [developer dashboard](https://rapidapi.com/developer/apps) and go to security for the `default-application`. The application key (API key) will be shown. Store it somewhere safe as it will be needed in the [final step](#Exporting-Credentials).
 
 ### Email Credentials
 
