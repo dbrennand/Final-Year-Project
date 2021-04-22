@@ -270,7 +270,8 @@ def send_email_report(
     """
     # Set email variables
     email_subject = "Friends Bot Likelihood Report"
-    email_body_text = f"Please see the friends bot likelihood report for @{username} attached to this email."
+    email_body_text = f"""Please see the friends bot likelihood report for @{username} attached to this email.
+Make sure you download the report to preserve its styling, as some email attachment previews can remove it."""
     # Create email multipart message
     message = MIMEMultipart()
     # Add from, to, and email subject to email message
