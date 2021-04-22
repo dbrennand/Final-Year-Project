@@ -200,7 +200,7 @@ From the root of the repository, run the project's application using the followi
     * Linux:
 
         ```bash
-        docker run --name fyp-app -t fyp-app:latest \
+        docker run --rm --name fyp-app \
             -e TWITTER_API_KEY="Enter the Twitter API key here." \
             -e TWITTER_API_SECRET="Enter the Twitter API secret here." \
             -e BOTOMETER_API_KEY="Enter the Botometer API key here." \
@@ -208,13 +208,14 @@ From the root of the repository, run the project's application using the followi
             -e EMAIL_SERVER_PORT="465" \
             -e EMAIL_SENDER_ADDRESS="Enter the account email address here." \
             -e EMAIL_SENDER_PASSWORD="Enter the account app password here." \
+            -t fyp-app:latest \
             python ./main.py {Twitter Username} {Email Address}
         ```
 
     * Windows (PowerShell):
 
         ```powershell
-        docker run --name fyp-app -t fyp-app:latest `
+        docker run --rm --name fyp-app `
             -e TWITTER_API_KEY="Enter the Twitter API key here." `
             -e TWITTER_API_SECRET="Enter the Twitter API secret here." `
             -e BOTOMETER_API_KEY="Enter the Botometer API key here." `
@@ -222,6 +223,7 @@ From the root of the repository, run the project's application using the followi
             -e EMAIL_SERVER_PORT="465" `
             -e EMAIL_SENDER_ADDRESS="Enter the account email address here." `
             -e EMAIL_SENDER_PASSWORD="Enter the account app password here." `
+            -t fyp-app:latest `
             python ./main.py {Twitter Username} {Email Address}
         ```
 
