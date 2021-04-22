@@ -35,6 +35,12 @@ def parse_args() -> argparse.Namespace:
 if __name__ == "__main__":
     # Initialise logging
     helpers.init_log_handler()
+    # Parse CLI arguments
+    args = parse_args()
+    # Log username and email arguments
+    loguru.logger.info(
+        f"Arguments - Username: @{args.username}, Recipient Email Address: {args.email}"
+    )
     # Get API and email credentials
     creds = helpers.get_env_vars(
         [
@@ -46,12 +52,6 @@ if __name__ == "__main__":
             "EMAIL_SENDER_ADDRESS",
             "EMAIL_SENDER_PASSWORD",
         ]
-    )
-    # Parse CLI arguments
-    args = parse_args()
-    # Log username and email arguments
-    loguru.logger.info(
-        f"Arguments - Username: @{args.username}, Recipient Email Address: {args.email}"
     )
     # Authenticate to the Twitter API (using Tweepy) and Botometer API (using botometer-python)
     twitter_api = twtr.auth(
