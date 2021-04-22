@@ -171,7 +171,7 @@ From the root of the repository, run the project's application using the followi
 >
 > The above command would produce a bot likelihood report for *@dbrennanduk's* Twitter friends and send the report to *exampleemail@gmail.com*.
 
-## Unit tests
+## Unit Tests
 
 See the unit tests [README](./src/test/README.md) file.
 
