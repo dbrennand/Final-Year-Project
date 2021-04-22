@@ -136,9 +136,9 @@ Once all the credentials have been collected, export them as environment variabl
     * Linux:
 
         ```bash
-        export TWITTER_API_KEY="Enter your Twitter API key here."
-        export TWITTER_API_SECRET="Enter your Twitter API secret here."
-        export BOTOMETER_API_KEY="Enter your Botometer API key here."
+        export TWITTER_API_KEY="Enter the Twitter API key here."
+        export TWITTER_API_SECRET="Enter the Twitter API secret here."
+        export BOTOMETER_API_KEY="Enter the Botometer API key here."
         export EMAIL_SERVER_DOMAIN="smtp.google.com"
         export EMAIL_SERVER_PORT="465"
         export EMAIL_SENDER_ADDRESS="Enter the account email address here."
@@ -148,9 +148,9 @@ Once all the credentials have been collected, export them as environment variabl
     * Windows (PowerShell):
 
         ```powershell
-        $Env:TWITTER_API_KEY="Enter your Twitter API key here."
-        $Env:TWITTER_API_SECRET="Enter your Twitter API secret here."
-        $Env:BOTOMETER_API_KEY="Enter your Botometer API key here."
+        $Env:TWITTER_API_KEY="Enter the Twitter API key here."
+        $Env:TWITTER_API_SECRET="Enter the Twitter API secret here."
+        $Env:BOTOMETER_API_KEY="Enter the Botometer API key here."
         $Env:EMAIL_SERVER_DOMAIN="smtp.google.com"
         $Env:EMAIL_SERVER_PORT="465"
         $Env:EMAIL_SENDER_ADDRESS="Enter the account email address here."
