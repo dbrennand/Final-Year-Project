@@ -159,7 +159,22 @@ Once all the credentials have been collected, export them as environment variabl
 
 ## Usage
 
-From the root of the repository, run the project's application using the following command: `python ./src/main.py {Twitter Username} {Email Address}`
+From the root of the repository, run the project's application using the command: `python ./src/main.py {Twitter Username} {Email Address}`
+
+### CLI Usage
+
+```bash
+usage: main.py [-h] username email
+
+Generates and emails a report containing bot likelihood scores for a Twitter user's friends.
+
+positional arguments:
+  username    The Twitter username to obtain friends for.
+  email       The recipient email address to send the report to.
+
+optional arguments:
+  -h, --help  show this help message and exit
+```
 
 > [!IMPORTANT]
 >
