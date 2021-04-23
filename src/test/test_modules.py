@@ -186,10 +186,10 @@ class TestGetEnvVars:
 
 @pytest.mark.utility
 def test_get_datetime(mocker):
-    # Mock datetime.datetime to test helpers.get_datetime method
-    mock_dt = mocker.patch("modules.helpers.datetime.datetime")
-    # Alter return value to a specific date to test against
-    mock_dt.now.return_value = datetime.datetime(2021, 4, 23, 12, 0, 1)
+    # Mock datetime to test helpers.get_datetime function
+    mock_dt = mocker.patch("modules.helpers.datetime")
+    # Alter return value of datetime.now() to a specific date to test against
+    mock_dt.datetime.now.return_value = datetime.datetime(2021, 4, 23, 12, 0, 1)
     # Get datetime string
     dt = helpers.get_datetime()
     # Check that a string was returned and is the mocked value
