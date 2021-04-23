@@ -90,7 +90,7 @@ def friends_bot_likelihood_scores(username: str) -> list:
 def reports_test_dir(request: pytest.FixtureRequest) -> str:
     """Returns the relative path to the test reports directory.
 
-    Also, adds a finaliser function to remove the reports directory and its contents
+    Also, adds a finaliser function to remove the test reports directory and its contents
     once the test has completed.
 
     Args:
@@ -99,10 +99,10 @@ def reports_test_dir(request: pytest.FixtureRequest) -> str:
     Returns:
         str: The relative path to the test reports directory.
     """
-    # Declare relative path to reports test directory
+    # Declare relative path to the test reports directory
     # to be created in the relevant tests
     reports_test_dir_path = "./src/test/reports"
-    # Add finalizer function to remove reports test directory
+    # Add finalizer function to remove the test reports directory
     # and its contents once the test has finished
     def remove_reports_dir_contents():
         shutil.rmtree(reports_test_dir_path)
@@ -315,7 +315,7 @@ def test_create_reports_dir(reports_test_dir: str) -> None:
     Args:
         reports_test_dir (str): The relative path to the test reports directory.
     """
-    # Create reports test directory
+    # Create test reports directory
     reports_dir = helpers.create_reports_dir(reports_dir=reports_test_dir)
     # Check that the directory has been created
     # and the returned path is the same provided
@@ -331,7 +331,7 @@ def test_create_reports_dir_already_exists(reports_test_dir: str, caplog) -> Non
         reports_test_dir (str): The relative path to the test reports directory.
         caplog: A pytest caplog fixture used to examine application log messages.
     """
-    # Create the reports test directory
+    # Create the test reports directory
     helpers.create_reports_dir(reports_dir=reports_test_dir)
     # Run the function again
     helpers.create_reports_dir(reports_dir=reports_test_dir)
@@ -615,7 +615,7 @@ def test_dump_report(
         friends_bot_likelihood_scores (list): A list containing the bot likelihood scores for each Twitter friend.
         _get_datetime (str): A string representing the current datetime.
     """
-    # Create reports test directory
+    # Create test reports directory
     reports_dir = helpers.create_reports_dir(reports_dir=reports_test_dir)
     # Render the friends bot likelihood report from the template
     report_render = helpers.render_report(
@@ -623,7 +623,7 @@ def test_dump_report(
         friends_bot_likelihood_scores=friends_bot_likelihood_scores,
         datetime_str=_get_datetime,
     )
-    # Dump report render to a file in the reports test directory
+    # Dump report render to a file in the test reports directory
     report_file_path = helpers.dump_report(
         report_render=report_render, reports_dir=reports_dir, username=username
     )
@@ -659,7 +659,7 @@ def test_send_email_report(
             "EMAIL_SENDER_PASSWORD",
         ]
     )
-    # Create reports test directory
+    # Create test reports directory
     reports_dir = helpers.create_reports_dir(reports_dir=reports_test_dir)
     # Render the friends bot likelihood report from the template
     report_render = helpers.render_report(
