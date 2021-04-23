@@ -204,7 +204,7 @@ From the root of the repository, run the project's application using the followi
             -e TWITTER_API_KEY="Enter the Twitter API key here." \
             -e TWITTER_API_SECRET="Enter the Twitter API secret here." \
             -e BOTOMETER_API_KEY="Enter the Botometer API key here." \
-            -e EMAIL_SERVER_DOMAIN="smtp.google.com" \
+            -e EMAIL_SERVER_DOMAIN="smtp.gmail.com" \
             -e EMAIL_SERVER_PORT="465" \
             -e EMAIL_SENDER_ADDRESS="Enter the account email address here." \
             -e EMAIL_SENDER_PASSWORD="Enter the account app password here." \
@@ -219,7 +219,7 @@ From the root of the repository, run the project's application using the followi
             -e TWITTER_API_KEY="Enter the Twitter API key here." `
             -e TWITTER_API_SECRET="Enter the Twitter API secret here." `
             -e BOTOMETER_API_KEY="Enter the Botometer API key here." `
-            -e EMAIL_SERVER_DOMAIN="smtp.google.com" `
+            -e EMAIL_SERVER_DOMAIN="smtp.gmail.com" `
             -e EMAIL_SERVER_PORT="465" `
             -e EMAIL_SENDER_ADDRESS="Enter the account email address here." `
             -e EMAIL_SENDER_PASSWORD="Enter the account app password here." `
