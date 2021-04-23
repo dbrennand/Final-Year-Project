@@ -41,10 +41,10 @@ def pytest_addoption(parser):
 
 
 @pytest.fixture
-def email(request):
+def email(request: pytest.FixtureRequest) -> str:
     return request.config.getoption("--email")
 
 
 @pytest.fixture
-def username(request):
+def username(request: pytest.FixtureRequest) -> str:
     return request.config.getoption("--username")
