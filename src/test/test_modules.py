@@ -1,6 +1,7 @@
 """Unit tests for the modules used in the application.
 """
 import pytest
+import pytest_mock
 import os
 import shutil
 import botometer
@@ -17,7 +18,15 @@ from modules import twitter as twtr
 
 
 @pytest.fixture
-def friends_bot_likelihood_scores(username) -> list:
+def friends_bot_likelihood_scores(username: str) -> list:
+    """Returns an example JSON response from the Botometer API.
+
+    Args:
+        username (str): A username provided by the pytest username fixture.
+
+    Returns:
+        list: A list containing the bot likelihood scores for each Twitter friend.
+    """
     return [
         {
             "display_scores": {
@@ -78,7 +87,18 @@ def friends_bot_likelihood_scores(username) -> list:
 
 
 @pytest.fixture
-def reports_test_dir(request) -> str:
+def reports_test_dir(request: pytest.FixtureRequest) -> str:
+    """Returns the relative path to the test reports directory.
+
+    Also, adds a finaliser function to remove the reports directory and its contents
+    once the test has completed.
+
+    Args:
+        request (pytest.FixtureRequest): A pytest fixture providing information of the requesting test function.
+
+    Returns:
+        str: The relative path to the test reports directory.
+    """
     # Declare relative path to reports test directory
     # to be created in the relevant tests
     reports_test_dir_path = "./src/test/reports"
@@ -94,14 +114,29 @@ def reports_test_dir(request) -> str:
 
 @pytest.fixture
 def botometer_creds() -> dict:
+    """Helper fixture to return Botometer API credentials in multiple tests.
+
+    See helpers.get_env_vars() for further details.
+
+    Returns:
+        dict: A dictionary containing the Botometer and Twitter API credentials.
+    """
+    # Get environment variables to authenticate to the Botometer API
     return helpers.get_env_vars(
         ["TWITTER_API_KEY", "TWITTER_API_SECRET", "BOTOMETER_API_KEY"]
     )
 
 
 @pytest.fixture
-def botometer_auth(botometer_creds) -> botometer.Botometer:
-    # Authenticate to the Botometer API
+def botometer_auth(botometer_creds: dict) -> botometer.Botometer:
+    """Helper fixture to return an authenticated botometer.Botometer object in multiple tests.
+
+    Args:
+        botometer_creds (dict): A dictionary containing the Botometer and Twitter API credentials.
+
+    Returns:
+        botometer.Botometer: A botometer.Botometer object authenticated to the Botometer and Twitter API.
+    """
     return botm.auth(
         api_key=botometer_creds["BOTOMETER_API_KEY"],
         consumer_key=botometer_creds["TWITTER_API_KEY"],
@@ -111,6 +146,13 @@ def botometer_auth(botometer_creds) -> botometer.Botometer:
 
 @pytest.fixture
 def twitter_creds() -> dict:
+    """Helper fixture to return Twitter API credentials in multiple tests.
+
+    See helpers.get_env_vars() for further details.
+
+    Returns:
+        dict: A dictionary containing the Twitter API credentials.
+    """
     return helpers.get_env_vars(
         [
             "TWITTER_API_KEY",
@@ -120,7 +162,15 @@ def twitter_creds() -> dict:
 
 
 @pytest.fixture
-def twitter_auth(twitter_creds) -> tweepy.API:
+def twitter_auth(twitter_creds: dict) -> tweepy.API:
+    """Helper fixture to return an authenticated tweepy.API object in multiple tests.
+
+    Args:
+        twitter_creds (dict): A dictionary containing the Twitter API credentials.
+
+    Returns:
+        tweepy.API: A Tweepy.API object authenticated to the Twitter API.
+    """
     # Authenticate to the Twitter API
     return twtr.auth(
         consumer_key=twitter_creds["TWITTER_API_KEY"],
@@ -130,21 +180,43 @@ def twitter_auth(twitter_creds) -> tweepy.API:
 
 @pytest.fixture
 def friend_ids() -> list:
+    """Helper fixture to return a list of Twitter friend IDs in multiple tests.
+
+    Returns:
+        list: A list containing two Twitter friend IDs.
+    """
     # @elonmusk and @BBCBreaking
     return [44196397, 5402612]
 
 
 @pytest.fixture
 def _get_datetime() -> str:
+    """Helper fixture to return the current datetime string.
+
+    See helpers.get_datetime() for further details.
+
+    Returns:
+        str: A string representing the current datetime.
+            Example return format: "23/04/2021 at 12:00:01".
+    """
     # Get current datetime string
     return helpers.get_datetime()
 
 
 class TestGetEnvVars:
+    """A class containing multiple tests for helpers.get_env_vars()."""
+
+    # Declare environment variable names to get in the tests
     env_var_names = ["TWITTER_API_KEY", "TWITTER_API_SECRET", "BOTOMETER_API_KEY"]
 
     @pytest.fixture(autouse=True)
-    def mock_os_environ(self, mocker) -> None:
+    def mock_os_environ(self, mocker: pytest_mock.MockerFixture) -> None:
+        """Mocker fixture to run for every test inside the class.
+
+        Args:
+            mocker (pytest_mock.MockerFixture): A pytest_mock.MockerFixture providing a
+                thin-wrapper around the patching API from the mock library.
+        """
         # Patch os.environ to return pre-set environment variables
         mocker.patch.dict(
             "os.environ",
@@ -156,14 +228,16 @@ class TestGetEnvVars:
         )
 
     @pytest.mark.utility
-    def test_get_env_vars_type(self):
+    def test_get_env_vars_type(self) -> None:
+        """Test the return value type from helpers.get_env_vars()."""
         # Get environment variables
         env_vars_dict = helpers.get_env_vars(self.env_var_names)
         # Check env_vars_dict is a dictionary
         assert type(env_vars_dict) == dict
 
     @pytest.mark.utility
-    def test_get_env_vars(self):
+    def test_get_env_vars(self) -> None:
+        """Test the expected dictionary keys and values are returned from helpers.get_env_vars()."""
         # Get environment variables
         env_vars = helpers.get_env_vars(self.env_var_names)
         # Check env_vars contains the mocked dict key value pairs
@@ -174,8 +248,13 @@ class TestGetEnvVars:
         )
 
     @pytest.mark.utility
-    def test_get_env_vars_error(caplog):
-        # Get environment variables
+    def test_get_env_vars_error(caplog) -> None:
+        """Test an error occurs in the logs for a non-existent environment variable.
+
+        Args:
+            caplog: A pytest caplog fixture used to examine application log messages.
+        """
+        # Get an environment variable that is not present
         env_vars_dict = helpers.get_env_vars(["TEST_ENV_VAR"])
         # Check an error occurred in the logs
         assert (
@@ -185,7 +264,13 @@ class TestGetEnvVars:
 
 
 @pytest.mark.utility
-def test_get_datetime(mocker):
+def test_get_datetime(mocker: pytest_mock.MockerFixture) -> None:
+    """Test helpers.get_datetime() returns the mocked value in the expected format.
+
+    Args:
+        mocker (pytest_mock.MockerFixture): A pytest_mock.MockerFixture providing a
+            thin-wrapper around the patching API from the mock library.
+    """
     # Mock datetime to test helpers.get_datetime function
     mock_dt = mocker.patch("modules.helpers.datetime")
     # Alter return value of datetime.now() to a specific date to test against
@@ -210,13 +295,26 @@ def test_get_datetime(mocker):
     ],
 )
 @pytest.mark.utility
-def test_get_lang_from_code(lang_code, expected_result):
-    # Check that the get_lang_from_code function returns the expected result
+def test_get_lang_from_code(lang_code: str, expected_result: str) -> None:
+    """Test helpers.get_lang_from_code() returns the expected value
+        given a string for the parameter lang_code.
+
+    Args:
+        lang_code (str): A string for the test to be provided to the lang_code parameter.
+        expected_result (str): The expected return value from helpers.get_lang_from_code().
+    """
+    # Check that helpers.get_lang_from_code() function returns the expected result
+    # for each parameterised test
     assert helpers.get_lang_from_code(lang_code=lang_code) == expected_result
 
 
 @pytest.mark.utility
-def test_create_reports_dir(reports_test_dir):
+def test_create_reports_dir(reports_test_dir: str) -> None:
+    """Test helpers.create_reports_dir() creates the test reports directory.
+
+    Args:
+        reports_test_dir (str): The relative path to the test reports directory.
+    """
     # Create reports test directory
     reports_dir = helpers.create_reports_dir(reports_dir=reports_test_dir)
     # Check that the directory has been created
@@ -225,7 +323,14 @@ def test_create_reports_dir(reports_test_dir):
 
 
 @pytest.mark.utility
-def test_create_reports_dir_already_exists(reports_test_dir, caplog):
+def test_create_reports_dir_already_exists(reports_test_dir: str, caplog) -> None:
+    """Test helpers.create_reports_dir() skips creating the test reports directory
+        if it already exists.
+
+    Args:
+        reports_test_dir (str): The relative path to the test reports directory.
+        caplog: A pytest caplog fixture used to examine application log messages.
+    """
     # Create the reports test directory
     helpers.create_reports_dir(reports_dir=reports_test_dir)
     # Run the function again
@@ -237,7 +342,12 @@ def test_create_reports_dir_already_exists(reports_test_dir, caplog):
 
 
 @pytest.mark.utility
-def test_create_reports_dir_err(caplog):
+def test_create_reports_dir_err(caplog) -> None:
+    """Test helpers.create_reports_dir() logs an error message when an invalid path is provided.
+
+    Args:
+        caplog: A pytest caplog fixture used to examine application log messages.
+    """
     invalid_path = "/somedir/that/does/not/exist"
     helpers.create_reports_dir(reports_dir=invalid_path)
     # Verify that an exception occurred in the logs
@@ -245,13 +355,19 @@ def test_create_reports_dir_err(caplog):
 
 
 @pytest.mark.botometer
-def test_botometer_auth(mocker):
+def test_botometer_auth(mocker: pytest_mock.MockerFixture) -> None:
+    """Test botm.auth() is invoked with the correct parameters.
+
+    Args:
+        mocker (pytest_mock.MockerFixture): A pytest_mock.MockerFixture providing a
+            thin-wrapper around the patching API from the mock library.
+    """
     mock_botm = mocker.patch("modules.botm.botometer")
     # Create a mock version of botometer.Botometer
     auth = botm.auth(
         api_key="API key", consumer_key="API key", consumer_secret="API secret"
     )
-    # Validate that the mock version of Botometer was invoked with the correct
+    # Validate that the mock version of botometer.Botometer was invoked with the correct
     # parameters
     mock_botm.Botometer.assert_called_with(
         rapidapi_key="API key",
@@ -263,12 +379,26 @@ def test_botometer_auth(mocker):
 
 
 @pytest.mark.botometer
-def test_botometer_auth_type(botometer_auth):
+def test_botometer_auth_type(botometer_auth: botometer.Botometer) -> None:
+    """Test botm.auth() (invoked in the botometer_auth fixture)
+        returns an instance of botometer.Botometer.
+
+    Args:
+        botometer_auth (botometer.Botometer): A botometer.Botometer object authenticated to the Botometer and Twitter API.
+    """
     assert isinstance(botometer_auth, botometer.Botometer)
 
 
 @pytest.mark.botometer
-def test_get_friends_bot_likelihood_scores_len_type(botometer_auth, friend_ids):
+def test_get_friends_bot_likelihood_scores_len_type(
+    botometer_auth: botometer.Botometer, friend_ids: list
+) -> None:
+    """Test botm.get_friends_bot_likelihood_scores() returns a list of the expected length.
+
+    Args:
+        botometer_auth (botometer.Botometer): A botometer.Botometer object authenticated to the Botometer and Twitter API.
+        friend_ids (list): A list containing two Twitter friend IDs.
+    """
     friends_bot_likelihood_scores = botm.get_friends_bot_likelihood_scores(
         api=botometer_auth, friends=friend_ids
     )
@@ -279,7 +409,16 @@ def test_get_friends_bot_likelihood_scores_len_type(botometer_auth, friend_ids):
 
 
 @pytest.mark.botometer
-def test_get_friends_bot_likelihood_scores_results(botometer_auth, friend_ids):
+def test_get_friends_bot_likelihood_scores_results(
+    botometer_auth: botometer.Botometer, friend_ids: list
+) -> None:
+    """Test botm.get_friends_bot_likelihood_scores() returns the expected
+        JSON results from the Botometer API for each friend ID provided.
+
+    Args:
+        botometer_auth (botometer.Botometer): A botometer.Botometer object authenticated to the Botometer and Twitter API.
+        friend_ids (list): A list containing two Twitter friend IDs.
+    """
     friends_bot_likelihood_scores = botm.get_friends_bot_likelihood_scores(
         api=botometer_auth, friends=friend_ids
     )
@@ -292,35 +431,42 @@ def test_get_friends_bot_likelihood_scores_results(botometer_auth, friend_ids):
 
 
 @pytest.mark.botometer
-def test_get_friends_bot_likelihood_scores_err(botometer_auth, caplog):
-    # Input a friend ID that does not exist, causing an error
+def test_get_friends_bot_likelihood_scores_err(
+    botometer_auth: botometer.Botometer, caplog
+) -> None:
+    """Test botm.get_friends_bot_likelihood_scores() logs an error when
+        provided an invalid friend ID.
+
+    Args:
+        botometer_auth (botometer.Botometer): A botometer.Botometer object authenticated to the Botometer and Twitter API.
+        caplog: A pytest caplog fixture used to examine application log messages.
+    """
+    # Input a friend ID that does not exist, causing an error to be logged
     botm.get_friends_bot_likelihood_scores(api=botometer_auth, friends=[-1])
     # Verify that an exception occurred in the logs
     assert "Failed to get any friends bot likelihood results." in caplog.text
 
 
 @pytest.mark.twitter
-def test_twitter_auth(mocker):
-    mock_tweepy = mocker.patch("modules.twtr.tweepy")
-    # Create a mock version of tweepy.API
-    auth = twtr.auth(consumer_key="API key", consumer_secret="API secret")
-    # Validate that the mock version of API was invoked with the correct
-    # parameters
-    mock_tweepy.API.assert_called_with(
-        tweepy.AppAuthHandler(consumer_key="API key", consumer_secret="API secret"),
-        retry_count=2,
-        retry_delay=3,
-        wait_on_rate_limit=True,
-    )
+def test_twitter_auth_type(twitter_auth: tweepy.API) -> None:
+    """Test twtr.auth() (invoked in the twitter_auth fixture)
+        returns an instance of tweepy.API.
 
-
-@pytest.mark.twitter
-def test_twitter_auth_type(twitter_auth):
+    Args:
+        twitter_auth (tweepy.API): A Tweepy.API object authenticated to the Twitter API.
+    """
     assert isinstance(twitter_auth, tweepy.API)
 
 
 @pytest.mark.twitter
-def test_get_friends_ids_len_types(twitter_auth, username):
+def test_get_friends_ids_len_types(twitter_auth: tweepy.API, username: str) -> None:
+    """Test twtr.get_friends_ids() returns a list of the expected length and that all values
+        in the list are integers.
+
+    Args:
+        twitter_auth (tweepy.API): A Tweepy.API object authenticated to the Twitter API.
+        username (str): A username provided by the pytest username fixture.
+    """
     friend_ids_list = twtr.get_friends_ids(api=twitter_auth, username=username)
     # Test returned list length
     # and all items in the list are integers
@@ -330,7 +476,15 @@ def test_get_friends_ids_len_types(twitter_auth, username):
 
 
 @pytest.mark.twitter
-def test_get_friends_ids_err_username(twitter_auth, caplog):
+def test_get_friends_ids_err_username(twitter_auth: tweepy.API, caplog) -> None:
+    """Test twtr.get_friends_ids() logs an error when provided an invalid username to get Twitter
+        friend IDs for.
+
+    Args:
+        twitter_auth (tweepy.API): A Tweepy.API object authenticated to the Twitter API.
+        caplog: A pytest caplog fixture used to examine application log messages.
+    """
+    # Declare an invalid username
     invalid_username = "This is not a valid username"
     twtr.get_friends_ids(api=twitter_auth, username=invalid_username)
     # Verify that an exception occurred in the logs
@@ -338,7 +492,13 @@ def test_get_friends_ids_err_username(twitter_auth, caplog):
 
 
 @pytest.mark.twitter
-def test_get_friends_ids_err_no_friends(twitter_auth, caplog):
+def test_get_friends_ids_err_no_friends(twitter_auth: tweepy.API, caplog) -> None:
+    """Test twtr.get_friends_ids() logs an error when provided a Twitter user that is not following anyone (has no friends).
+
+    Args:
+        twitter_auth (tweepy.API): A Tweepy.API object authenticated to the Twitter API.
+        caplog: A pytest caplog fixture used to examine application log messages.
+    """
     # A Twitter bot that has no friends
     username = "ProgressYearBar"
     twtr.get_friends_ids(api=twitter_auth, username=username)
@@ -353,7 +513,16 @@ def test_get_friends_ids_err_no_friends(twitter_auth, caplog):
 
 
 @pytest.mark.report
-def test_render_report(username, friends_bot_likelihood_scores, _get_datetime):
+def test_render_report(
+    username: str, friends_bot_likelihood_scores: list, _get_datetime: str
+) -> None:
+    """Test helpers.render_report() returns a string when provided all parameters.
+
+    Args:
+        username (str): A username provided by the pytest username fixture.
+        friends_bot_likelihood_scores (list): A list containing the bot likelihood scores for each Twitter friend.
+        _get_datetime (str): A string representing the current datetime.
+    """
     assert (
         type(
             helpers.render_report(
@@ -367,7 +536,15 @@ def test_render_report(username, friends_bot_likelihood_scores, _get_datetime):
 
 
 @pytest.mark.report
-def test_render_report_no_username(friends_bot_likelihood_scores, _get_datetime):
+def test_render_report_no_username(
+    friends_bot_likelihood_scores: list, _get_datetime: str
+) -> None:
+    """Test helpers.render_report() returns a string when the username parameter is empty string.
+
+    Args:
+        friends_bot_likelihood_scores (list): A list containing the bot likelihood scores for each Twitter friend.
+        _get_datetime (str): A string representing the current datetime.
+    """
     assert (
         type(
             helpers.render_report(
@@ -381,7 +558,14 @@ def test_render_report_no_username(friends_bot_likelihood_scores, _get_datetime)
 
 
 @pytest.mark.report
-def test_render_report_no_scores(username, _get_datetime):
+def test_render_report_no_scores(username: str, _get_datetime: str) -> None:
+    """Test helpers.render_report() returns a string when the
+        friends_bot_likelihood_scores parameter is an empty dictionary.
+
+    Args:
+        username (str): A username provided by the pytest username fixture.
+        _get_datetime (str): A string representing the current datetime.
+    """
     assert (
         type(
             helpers.render_report(
@@ -395,7 +579,15 @@ def test_render_report_no_scores(username, _get_datetime):
 
 
 @pytest.mark.report
-def test_render_report_no_datetime(username, friends_bot_likelihood_scores):
+def test_render_report_no_datetime(
+    username: str, friends_bot_likelihood_scores: list
+) -> None:
+    """Test helpers.render_report() returns a string when the datetime_str parameter is an empty string.
+
+    Args:
+        username (str): A username provided by the pytest username fixture.
+        friends_bot_likelihood_scores (list): A list containing the bot likelihood scores for each Twitter friend.
+    """
     assert (
         type(
             helpers.render_report(
@@ -410,8 +602,19 @@ def test_render_report_no_datetime(username, friends_bot_likelihood_scores):
 
 @pytest.mark.report
 def test_dump_report(
-    reports_test_dir, username, friends_bot_likelihood_scores, _get_datetime
-):
+    reports_test_dir: str,
+    username: str,
+    friends_bot_likelihood_scores: list,
+    _get_datetime: str,
+) -> None:
+    """Test helpers.dump_report() creates a report file at the returned file path.
+
+    Args:
+        reports_test_dir (str): The relative path to the test reports directory.
+        username (str): A username provided by the pytest username fixture.
+        friends_bot_likelihood_scores (list): A list containing the bot likelihood scores for each Twitter friend.
+        _get_datetime (str): A string representing the current datetime.
+    """
     # Create reports test directory
     reports_dir = helpers.create_reports_dir(reports_dir=reports_test_dir)
     # Render the friends bot likelihood report from the template
@@ -420,23 +623,33 @@ def test_dump_report(
         friends_bot_likelihood_scores=friends_bot_likelihood_scores,
         datetime_str=_get_datetime,
     )
-    # Dump report render to a file in the reports directory
+    # Dump report render to a file in the reports test directory
     report_file_path = helpers.dump_report(
         report_render=report_render, reports_dir=reports_dir, username=username
     )
-    # Check the report render was dumped to a file
+    # Check the report was dumped at the file path returned
     assert os.path.exists(report_file_path)
 
 
 @pytest.mark.email
 def test_send_email_report(
-    reports_test_dir,
-    friends_bot_likelihood_scores,
-    _get_datetime,
-    email,
-    username,
+    reports_test_dir: str,
+    friends_bot_likelihood_scores: list,
+    _get_datetime: str,
+    email: str,
+    username: str,
     caplog,
-):
+) -> None:
+    """Test helpers.send_email_report() logs a success message when an email is sent successfully.
+
+    Args:
+        reports_test_dir (str): The relative path to the test reports directory.
+        friends_bot_likelihood_scores (list): A list containing the bot likelihood scores for each Twitter friend.
+        _get_datetime (str): A string representing the current datetime.
+        email (str): A email provided by the pytest email fixture.
+        username (str): A username provided by the pytest username fixture.
+        caplog: A pytest caplog fixture used to examine application log messages.
+    """
     # Get email credentials
     email_creds = helpers.get_env_vars(
         [
