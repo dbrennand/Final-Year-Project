@@ -248,7 +248,7 @@ class TestGetEnvVars:
         )
 
     @pytest.mark.utility
-    def test_get_env_vars_error(caplog) -> None:
+    def test_get_env_vars_error(self, caplog) -> None:
         """Test an error occurs in the logs for a non-existent environment variable.
 
         Args:
