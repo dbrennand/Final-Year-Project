@@ -8,6 +8,7 @@ import pycountry
 import jinja2
 import smtplib
 import ssl
+import socket
 
 # Explicitly declare email imports
 from email import encoders
@@ -341,6 +342,7 @@ Make sure you download the report to preserve its styling, as some email attachm
         smtplib.SMTPRecipientsRefused,
         smtplib.SMTPSenderRefused,
         smtplib.SMTPDataError,
+        socket.timeout,
     ) as err:
         loguru.logger.exception(
             f"Failed to send email from: {email_sender_addr} to: {email_recipient_addr} using the email server: {email_server}.\n{err}"
