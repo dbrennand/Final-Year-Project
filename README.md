@@ -79,7 +79,7 @@ Once you have chosen a plan, go to the RapidAPI [developer dashboard](https://ra
 >
 > If you are using another email provider, you will need to find their own instructions on how to authenticate to their email servers.
 
-At the time of writing (21/04/2021), Google's SMTP server domain is `smtp.google.com` and SSL port is `465`. For more information, see the *Use the Gmail SMTP server* heading in Google's [documentation](https://support.google.com/a/answer/176600?hl=en#zippy=%2Cuse-the-gmail-smtp-server).
+At the time of writing (21/04/2021), Google's SMTP server domain is `smtp.gmail.com` and SSL port is `465`. For more information, see the *Use the Gmail SMTP server* heading in Google's [documentation](https://support.google.com/a/answer/176600?hl=en#zippy=%2Cuse-the-gmail-smtp-server).
 
 Perform the steps below to generate an app password for a Google account. This will allow the project's application to send an email from the account.
 
@@ -139,7 +139,7 @@ Once all the credentials have been collected, export them as environment variabl
         export TWITTER_API_KEY="Enter the Twitter API key here."
         export TWITTER_API_SECRET="Enter the Twitter API secret here."
         export BOTOMETER_API_KEY="Enter the Botometer API key here."
-        export EMAIL_SERVER_DOMAIN="smtp.google.com"
+        export EMAIL_SERVER_DOMAIN="smtp.gmail.com"
         export EMAIL_SERVER_PORT="465"
         export EMAIL_SENDER_ADDRESS="Enter the account email address here."
         export EMAIL_SENDER_PASSWORD="Enter the account app password here."
@@ -151,7 +151,7 @@ Once all the credentials have been collected, export them as environment variabl
         $Env:TWITTER_API_KEY="Enter the Twitter API key here."
         $Env:TWITTER_API_SECRET="Enter the Twitter API secret here."
         $Env:BOTOMETER_API_KEY="Enter the Botometer API key here."
-        $Env:EMAIL_SERVER_DOMAIN="smtp.google.com"
+        $Env:EMAIL_SERVER_DOMAIN="smtp.gmail.com"
         $Env:EMAIL_SERVER_PORT="465"
         $Env:EMAIL_SENDER_ADDRESS="Enter the account email address here."
         $Env:EMAIL_SENDER_PASSWORD="Enter the account app password here."
