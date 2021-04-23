@@ -5,6 +5,7 @@ import os
 import shutil
 import botometer
 import tweepy
+import datetime
 
 # Local imports
 from modules import botm
@@ -92,19 +93,6 @@ def reports_test_dir(request) -> str:
 
 
 @pytest.fixture
-def env_vars() -> list:
-    return [
-        "TWITTER_API_KEY",
-        "TWITTER_API_SECRET",
-        "BOTOMETER_API_KEY",
-        "EMAIL_SERVER_DOMAIN",
-        "EMAIL_SERVER_PORT",
-        "EMAIL_SENDER_ADDRESS",
-        "EMAIL_SENDER_PASSWORD",
-    ]
-
-
-@pytest.fixture
 def botometer_creds() -> dict:
     return helpers.get_env_vars(
         ["TWITTER_API_KEY", "TWITTER_API_SECRET", "BOTOMETER_API_KEY"]
@@ -152,42 +140,60 @@ def _get_datetime() -> str:
     return helpers.get_datetime()
 
 
-@pytest.mark.utility
-def test_get_env_vars_type(env_vars):
-    # Get environment variables
-    env_vars_dict = helpers.get_env_vars(env_vars)
-    # Check env_vars_dict is a dictionary
-    assert type(env_vars_dict) == dict
+class TestGetEnvVars:
+    env_var_names = ["TWITTER_API_KEY", "TWITTER_API_SECRET", "BOTOMETER_API_KEY"]
+
+    @pytest.fixture(autouse=True)
+    def mock_os_environ(self, mocker) -> None:
+        # Patch os.environ to return pre-set environment variables
+        mocker.patch.dict(
+            "os.environ",
+            dict(
+                TWITTER_API_KEY="API key",
+                TWITTER_API_SECRET="API secret",
+                BOTOMETER_API_KEY="API key",
+            ),
+        )
+
+    @pytest.mark.utility
+    def test_get_env_vars_type(self):
+        # Get environment variables
+        env_vars_dict = helpers.get_env_vars(self.env_var_names)
+        # Check env_vars_dict is a dictionary
+        assert type(env_vars_dict) == dict
+
+    @pytest.mark.utility
+    def test_get_env_vars(self):
+        # Get environment variables
+        env_vars = helpers.get_env_vars(self.env_var_names)
+        # Check env_vars contains the mocked dict key value pairs
+        assert env_vars == dict(
+            TWITTER_API_KEY="API key",
+            TWITTER_API_SECRET="API secret",
+            BOTOMETER_API_KEY="API key",
+        )
+
+    @pytest.mark.utility
+    def test_get_env_vars_error(caplog):
+        # Get environment variables
+        env_vars_dict = helpers.get_env_vars(["TEST_ENV_VAR"])
+        # Check an error occurred in the logs
+        assert (
+            "Environment variable: TEST_ENV_VAR is missing. See prerequisite steps in the README file."
+            in caplog.text
+        )
 
 
 @pytest.mark.utility
-def test_get_env_vars(env_vars):
-    # Get environment variables
-    env_vars_dict = helpers.get_env_vars(env_vars)
-    # Get dictionary keys
-    env_vars_dict_keys = env_vars_dict.keys()
-    # Iterate over environment variables list
-    for env_var in env_vars:
-        # Check environment variable key is present in the dict
-        assert env_var in env_vars_dict_keys
-
-
-@pytest.mark.utility
-def test_get_env_vars_error(caplog):
-    # Get environment variables
-    env_vars_dict = helpers.get_env_vars(["TEST_ENV_VAR"])
-    # Check an error occurred in the logs
-    assert (
-        "Environment variable: TEST_ENV_VAR is missing. See prerequisite steps in the README file."
-        in caplog.text
-    )
-
-
-@pytest.mark.utility
-def test_get_datetime(_get_datetime):
-    # Check that a string was returned
-    # and that "at" is present in the string
-    assert (type(_get_datetime) == str) and ("at" in _get_datetime)
+def test_get_datetime(mocker):
+    # Mock datetime.datetime to test helpers.get_datetime method
+    mock_dt = mocker.patch("modules.helpers.datetime.datetime")
+    # Alter return value to a specific date to test against
+    mock_dt.now.return_value = datetime.datetime(2021, 4, 23, 12, 0, 1)
+    # Get datetime string
+    dt = helpers.get_datetime()
+    # Check that a string was returned and is the mocked value
+    assert "23/04/2021 at 12:00:01" == dt
 
 
 @pytest.mark.parametrize(
@@ -239,6 +245,24 @@ def test_create_reports_dir_err(caplog):
 
 
 @pytest.mark.botometer
+def test_botometer_auth(mocker):
+    mock_botm = mocker.patch("modules.botm.botometer")
+    # Create a mock version of botometer.Botometer
+    auth = botm.auth(
+        api_key="API key", consumer_key="API key", consumer_secret="API secret"
+    )
+    # Validate that the mock version of Botometer was invoked with the correct
+    # parameters
+    mock_botm.Botometer.assert_called_with(
+        rapidapi_key="API key",
+        consumer_key="API key",
+        consumer_secret="API secret",
+        tweepy_kwargs={"retry_count": 2, "retry_delay": 3},
+        wait_on_ratelimit=True,
+    )
+
+
+@pytest.mark.botometer
 def test_botometer_auth_type(botometer_auth):
     assert isinstance(botometer_auth, botometer.Botometer)
 
@@ -273,6 +297,21 @@ def test_get_friends_bot_likelihood_scores_err(botometer_auth, caplog):
     botm.get_friends_bot_likelihood_scores(api=botometer_auth, friends=[-1])
     # Verify that an exception occurred in the logs
     assert "Failed to get any friends bot likelihood results." in caplog.text
+
+
+@pytest.mark.twitter
+def test_twitter_auth(mocker):
+    mock_tweepy = mocker.patch("modules.twtr.tweepy")
+    # Create a mock version of tweepy.API
+    auth = twtr.auth(consumer_key="API key", consumer_secret="API secret")
+    # Validate that the mock version of API was invoked with the correct
+    # parameters
+    mock_tweepy.API.assert_called_with(
+        tweepy.AppAuthHandler(consumer_key="API key", consumer_secret="API secret"),
+        retry_count=2,
+        retry_delay=3,
+        wait_on_rate_limit=True,
+    )
 
 
 @pytest.mark.twitter
@@ -391,7 +430,6 @@ def test_dump_report(
 
 @pytest.mark.email
 def test_send_email_report(
-    env_vars,
     reports_test_dir,
     friends_bot_likelihood_scores,
     _get_datetime,
@@ -399,7 +437,15 @@ def test_send_email_report(
     username,
     caplog,
 ):
-    creds = helpers.get_env_vars(env_vars)
+    # Get email credentials
+    email_creds = helpers.get_env_vars(
+        [
+            "EMAIL_SERVER_DOMAIN",
+            "EMAIL_SERVER_PORT",
+            "EMAIL_SENDER_ADDRESS",
+            "EMAIL_SENDER_PASSWORD",
+        ]
+    )
     # Create reports test directory
     reports_dir = helpers.create_reports_dir(reports_dir=reports_test_dir)
     # Render the friends bot likelihood report from the template
@@ -414,10 +460,10 @@ def test_send_email_report(
     )
     # Send email with report attached
     helpers.send_email_report(
-        email_server=creds["EMAIL_SERVER_DOMAIN"],
-        email_server_port=int(creds["EMAIL_SERVER_PORT"]),
-        email_sender_addr=creds["EMAIL_SENDER_ADDRESS"],
-        email_sender_pass=creds["EMAIL_SENDER_PASSWORD"],
+        email_server=email_creds["EMAIL_SERVER_DOMAIN"],
+        email_server_port=int(email_creds["EMAIL_SERVER_PORT"]),
+        email_sender_addr=email_creds["EMAIL_SENDER_ADDRESS"],
+        email_sender_pass=email_creds["EMAIL_SENDER_PASSWORD"],
         email_recipient_addr=email,
         report_file_path=report_file_path,
         username=username,
