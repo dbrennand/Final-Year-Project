@@ -184,7 +184,6 @@ def get_username(api: faker.Faker) -> str:
     Returns:
         str: A randomly generated username.
     """
-    loguru.logger.debug("Getting a random username for demo purposes.")
     return api.user_name()
 
 
@@ -197,7 +196,6 @@ def get_scores(api: faker.Faker) -> list:
     Returns:
         list: A list containing 7 random scores (ranging from 0 to 5).
     """
-    loguru.logger.debug("Getting scores for demo purposes.")
     # Declare scores list
     scores = []
     # Generate 7 random scores
