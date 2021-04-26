@@ -184,7 +184,7 @@ def get_username(api: faker.Faker) -> str:
     Returns:
         str: A randomly generated username.
     """
-    return api.user_name()
+    return api.unique.user_name()
 
 
 def get_scores(api: faker.Faker) -> list:
@@ -201,7 +201,7 @@ def get_scores(api: faker.Faker) -> list:
     # Generate 7 random scores
     for _ in range(7):
         # Generate a float from 0 to 5, rounded to one decimal place
-        score = round(api.pyfloat(min_value=0, max_value=5), ndigits=1)
+        score = round(api.unique.pyfloat(min_value=0, max_value=5), ndigits=1)
         # Add score to the list
         scores.append(score)
     return scores
