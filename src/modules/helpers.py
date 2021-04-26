@@ -209,7 +209,7 @@ def get_demo_friends_bot_likelihood_scores() -> list:
     """Generates a set of friends bot likelihood scores for demo purposes.
 
     Returns:
-        list: A list containing the bot likelihood scores for each Twitter friend.
+        list: A list containing the (demo) bot likelihood scores for each Twitter friend.
     """
     loguru.logger.info("Getting usernames and scores for demo purposes.")
     # Initialise Faker class
