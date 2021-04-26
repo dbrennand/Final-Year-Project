@@ -16,7 +16,7 @@ To run the unit tests:
 
 1. Ensure you have performed the [prerequisite](#Prerequisites) steps above.
 
-2. From the root of the repository (ie: `Final-Year-Project`), use the following command to run all the unit tests (providing proper email and username options): `pytest --email example@email.com --username twitterusername`
+2. From the root of the repository, use the following command to run all the unit tests (providing proper email and username options): `pytest --email example@email.com --username twitterusername`
 
 > [!NOTE]
 >
