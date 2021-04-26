@@ -6,6 +6,7 @@ import os
 import shutil
 import botometer
 import tweepy
+import faker
 import datetime
 
 # Local imports
@@ -356,7 +357,7 @@ def test_create_reports_dir_err(caplog) -> None:
 
 @pytest.mark.utility
 @pytest.mark.demo
-def test_get_username_type(faker) -> None:
+def test_get_username_type(faker: faker.Faker) -> None:
     """Test helpers.get_username() returns a string.
 
     Args:
@@ -368,7 +369,7 @@ def test_get_username_type(faker) -> None:
 @pytest.mark.utility
 @pytest.mark.demo
 # https://faker.readthedocs.io/en/master/pytest-fixtures.html
-def test_get_username(mocker: pytest_mock.MockerFixture, faker) -> None:
+def test_get_username(mocker: pytest_mock.MockerFixture, faker: faker.Faker) -> None:
     """Test helpers.get_username() returns the expected usernames when seeded.
 
     Args:
@@ -393,7 +394,7 @@ def test_get_username(mocker: pytest_mock.MockerFixture, faker) -> None:
 
 @pytest.mark.utility
 @pytest.mark.demo
-def test_get_scores_len_type(faker) -> None:
+def test_get_scores_len_type(faker: faker.Faker) -> None:
     """Test helpers.get_scores() returns a list of the expected length
     and all items in the list are integers.
 
@@ -412,7 +413,7 @@ def test_get_scores_len_type(faker) -> None:
 
 @pytest.mark.utility
 @pytest.mark.demo
-def test_get_scores(faker) -> None:
+def test_get_scores(faker: faker.Faker) -> None:
     """Test helpers.get_scores() returns the expected scores when seeded.
 
     Args:
