@@ -28,6 +28,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "email", type=str, help="The recipient email address to send the report to."
     )
+    # Add argument for demo mode
+    parser.add_argument(
+        "--demo",
+        default=False,
+        action="store_true",
+        help="Flag to run the application in demo mode.",
+    )
     # Parse arguments and return
     return parser.parse_args()
 
