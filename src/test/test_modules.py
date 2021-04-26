@@ -354,6 +354,92 @@ def test_create_reports_dir_err(caplog) -> None:
     assert f"Failed to create reports directory at path: {invalid_path}." in caplog.text
 
 
+@pytest.mark.utility
+@pytest.mark.demo
+def test_get_username_type(faker) -> None:
+    """Test helpers.get_username() returns a string.
+
+    Args:
+        faker: A faker fixture for pytest.
+    """
+    assert type(helpers.get_username(api=faker)) == str
+
+
+@pytest.mark.utility
+@pytest.mark.demo
+# https://faker.readthedocs.io/en/master/pytest-fixtures.html
+def test_get_username(mocker: pytest_mock.MockerFixture, faker) -> None:
+    """Test helpers.get_username() returns the expected usernames when seeded.
+
+    Args:
+        mocker (pytest_mock.MockerFixture): A pytest_mock.MockerFixture providing a
+            thin-wrapper around the patching API from the mock library.
+        faker: A faker fixture for pytest.
+    """
+    expected_usernames = ["zoconnor", "melissa34", "hmartin", "ogreen", "cheryllopez"]
+    # Seed faker for this test
+    faker.seed_instance(12345)
+    # Create spy for helpers.get_username()
+    spy_get_username = mocker.spy(helpers, "get_username")
+    # Get 5 usernames and check they are expected from the seed value
+    for num in range(5):
+        # Get a username
+        username = helpers.get_username(api=faker)
+        # Check its the expected username
+        assert username == expected_usernames[num]
+    # Check that helpers.get_username() was called 5 times
+    assert spy_get_username.call_count == 5
+
+
+@pytest.mark.utility
+@pytest.mark.demo
+def test_get_scores_len_type(faker) -> None:
+    """Test helpers.get_scores() returns a list of the expected length
+    and all items in the list are integers.
+
+    Args:
+        faker: A faker fixture for pytest.
+    """
+    # Get 7 random scores
+    scores = helpers.get_scores(api=faker)
+    # Test returned type, length and all items in the list are integers
+    assert (
+        (type(scores) == list)
+        and (all(isinstance(score, float) for score in scores))
+        and (len(scores) == 7)
+    )
+
+
+@pytest.mark.utility
+@pytest.mark.demo
+def test_get_scores(faker) -> None:
+    """Test helpers.get_scores() returns the expected scores when seeded.
+
+    Args:
+        faker: A faker fixture for pytest.
+    """
+    expected_scores = [3.8, 1.2, 3.9, 2.2, 1.1, 3.8, 3.9]
+    # Seed faker for this test
+    faker.seed_instance(2468)
+    # Get 7 scores and check they are expected from the seed value
+    scores = helpers.get_scores(api=faker)
+    for score in scores:
+        assert score in expected_scores
+
+
+@pytest.mark.utility
+@pytest.mark.demo
+def test_get_demo_friends_bot_likelihood_scores_len_type() -> None:
+    """Test helpers.get_demo_friends_bot_likelihood_scores() returns a list of the
+    expected length.
+    """
+    gen_friends_bot_likelihood_scores = helpers.get_demo_friends_bot_likelihood_scores()
+    # Test returned list length and type
+    assert (type(gen_friends_bot_likelihood_scores) == list) and (
+        len(gen_friends_bot_likelihood_scores) == 15
+    )
+
+
 @pytest.mark.botometer
 def test_botometer_auth(mocker: pytest_mock.MockerFixture) -> None:
     """Test botm.auth() is invoked with the correct parameters.
