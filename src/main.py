@@ -51,6 +51,15 @@ if __name__ == "__main__":
     # Check if the demo argument has been provided
     # to run the application in demo mode
     if args.demo:
+        # Get email credentials
+        creds = helpers.get_env_vars(
+            [
+                "EMAIL_SERVER_DOMAIN",
+                "EMAIL_SERVER_PORT",
+                "EMAIL_SENDER_ADDRESS",
+                "EMAIL_SENDER_PASSWORD",
+            ]
+        )
         loguru.logger.info("Demo argument provided, running application in demo mode.")
         # Get generated friends bot likelihood scores for the demo
         friends_bot_likelihood_scores = helpers.get_demo_friends_bot_likelihood_scores()
