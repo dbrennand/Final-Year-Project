@@ -25,6 +25,7 @@ tweepy = "3.10.0"
 loguru = "0.5.3"
 jinja2 = "2.11.3"
 pycountry = "20.7.3"
+faker = "8.1.1"
 
 [dev-packages]
 black = "20.8b1"
