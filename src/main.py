@@ -30,6 +30,7 @@ def parse_args() -> argparse.Namespace:
     )
     # Add argument for demo mode
     parser.add_argument(
+        "-d",
         "--demo",
         default=False,
         action="store_true",
