@@ -164,8 +164,8 @@ From the root of the repository, run the project's application using the command
 
 ### CLI Usage
 
-```bash
-usage: main.py [-h] username email
+```
+usage: main.py [-h] [-d] username email
 
 Generates and emails a report containing bot likelihood scores for a Twitter user's friends.
 
@@ -175,6 +175,7 @@ positional arguments:
 
 optional arguments:
   -h, --help  show this help message and exit
+  -d, --demo  Flag to run the application in demo mode.
 ```
 
 > [!IMPORTANT]
@@ -186,6 +187,10 @@ optional arguments:
 > `python ./src/main.py dbrennanduk exampleemail@gmail.com`
 >
 > The above command would produce a bot likelihood report for *@dbrennanduk's* Twitter friends and send the report to *exampleemail@gmail.com*.
+
+> [!NOTE]
+>
+> The application can be run in demo mode by providing either `-d` or `--demo` as an optional argument.
 
 ## Unit Tests
 
