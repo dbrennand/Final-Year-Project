@@ -5,6 +5,7 @@ import os
 import typing
 import datetime
 import pycountry
+import faker
 import jinja2
 import smtplib
 import ssl
@@ -169,6 +170,58 @@ def create_reports_dir(reports_dir: str = f"{os.getcwd()}/src/reports") -> str:
     else:
         loguru.logger.debug(f"Reports directory at path: {reports_dir} already exists.")
     return reports_dir
+
+
+# Demo functions (Utility)
+
+
+def get_username(api: faker.Faker) -> str:
+    """Gets a random username for demo purposes.
+
+    Args:
+        api (faker.Faker): A faker.Faker object used to generate a random username.
+
+    Returns:
+        str: A randomly generated username.
+    """
+    return api.user_name()
+
+
+def get_scores(api: faker.Faker) -> list:
+    """Gets a set of 7 scores for demo purposes.
+
+    Args:
+        api (faker.Faker): A faker.Faker object used to generate random scores.
+
+    Returns:
+        list: A list containing 7 random scores (ranging from 0 to 5).
+    """
+    # Declare scores list
+    scores = []
+    # Generate 7 random scores
+    for _ in range(7):
+        score = round(api.pyfloat(min_value=0, max_value=5), ndigits=1)
+        scores.append(score)
+    return scores
+
+
+def get_demo_friends_bot_likelihood_scores() -> list:
+    """Generates a set of friends bot likelihood scores for demo purposes.
+
+    Returns:
+        list: A list containing the bot likelihood scores for each Twitter friend.
+    """
+    loguru.logger.info("Getting usernames and scores for demo purposes.")
+    # Initialise Faker class
+    fake = faker.Faker()
+    # Declare list to hold generated scores for the demo
+    gen_friends_bot_likelihood_scores = []
+    # Generate 15 random usernames and scores to be used in the demo
+    for _ in range(15):
+        # Get a random username
+        un = get_username(api=fake)
+        # Get 7 random scores
+        scores = get_scores(api=fake)
 
 
 # Report functions
