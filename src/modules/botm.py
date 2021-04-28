@@ -16,7 +16,7 @@ def auth(api_key: str, consumer_key: str, consumer_secret: str) -> botometer.Bot
         consumer_secret (str): A string containing the Twitter API consumer secret.
 
     Returns:
-        botometer.Botometer: A botometer.Botometer object authenticated to the Botometer and Twitter API.
+        botometer.Botometer: A botometer.Botometer object authenticated to the Botometer and Twitter APIs.
     """
     loguru.logger.info("Authenticating to the Botometer API.")
     # Initialise botometer constructor and provide API credentials
@@ -30,7 +30,7 @@ def auth(api_key: str, consumer_key: str, consumer_secret: str) -> botometer.Bot
             wait_on_ratelimit=True,
         )
     except requests.exceptions.ConnectionError as err:
-        loguru.logger.exception(f"Failed to authenticate to the Botometer and Twitter API.\n{err}")
+        loguru.logger.exception(f"Failed to authenticate to the Botometer and Twitter APIs.\n{err}")
 
 
 def get_friends_bot_likelihood_scores(api: botometer.Botometer, friends: list) -> list:
