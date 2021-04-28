@@ -108,7 +108,7 @@ def get_friends_bot_likelihood_scores(api: botometer.Botometer, friends: list) -
         Exception,
     ) as err:
         loguru.logger.warning(
-            f"An exception occurred: {err} and all retries to Botometer have been exhausted."
+            f"An exception occurred and all retries to Botometer have been exhausted.\n{err}"
         )
         # Check if the list has one or more results
         if bool(friends_bot_likelihood_scores):
