@@ -554,6 +554,93 @@ def test_get_friends_bot_likelihood_scores_err(
     assert "Failed to get any friends bot likelihood results." in caplog.text
 
 
+@pytest.mark.botometer
+def test_get_friends_bot_likelihood_scores_conn_err(
+    botometer_auth: botometer.Botometer,
+    friend_ids: list,
+    mocker: pytest_mock.MockerFixture,
+    caplog,
+) -> None:
+    """Test botm.get_friends_bot_likelihood_scores() logs an error when a ConnectionError occurs.
+
+    Args:
+        botometer_auth (botometer.Botometer): A botometer.Botometer object authenticated to the Botometer and Twitter API.
+        friend_ids (list): A list containing two Twitter friend IDs.
+        mocker (pytest_mock.MockerFixture): A pytest_mock.MockerFixture providing a
+            thin-wrapper around the patching API from the mock library.
+        caplog: A pytest caplog fixture used to examine application log messages.
+    """
+    # Patch botometer.Botometer.check_accounts_in method to raise a ConnectionError
+    mocker.patch(
+        "modules.botm.botometer.Botometer.check_accounts_in",
+        side_effect=botometer.ConnectionError(),
+    )
+    botm.get_friends_bot_likelihood_scores(api=botometer_auth, friends=friend_ids)
+    # Verify that an exception occurred in the logs
+    assert (
+        "An exception occurred and all retries to Botometer have been exhausted."
+        in caplog.text
+    )
+
+
+@pytest.mark.botometer
+def test_get_friends_bot_likelihood_scores_http_err(
+    botometer_auth: botometer.Botometer,
+    friend_ids: list,
+    mocker: pytest_mock.MockerFixture,
+    caplog,
+) -> None:
+    """Test botm.get_friends_bot_likelihood_scores() logs an error when a HTTPError occurs.
+
+    Args:
+        botometer_auth (botometer.Botometer): A botometer.Botometer object authenticated to the Botometer and Twitter API.
+        friend_ids (list): A list containing two Twitter friend IDs.
+        mocker (pytest_mock.MockerFixture): A pytest_mock.MockerFixture providing a
+            thin-wrapper around the patching API from the mock library.
+        caplog: A pytest caplog fixture used to examine application log messages.
+    """
+    # Patch botometer.Botometer.check_accounts_in method to raise a HTTPError
+    mocker.patch(
+        "modules.botm.botometer.Botometer.check_accounts_in",
+        side_effect=botometer.HTTPError(),
+    )
+    botm.get_friends_bot_likelihood_scores(api=botometer_auth, friends=friend_ids)
+    # Verify that an exception occurred in the logs
+    assert (
+        "An exception occurred and all retries to Botometer have been exhausted."
+        in caplog.text
+    )
+
+
+@pytest.mark.botometer
+def test_get_friends_bot_likelihood_scores_timeout_err(
+    botometer_auth: botometer.Botometer,
+    friend_ids: list,
+    mocker: pytest_mock.MockerFixture,
+    caplog,
+) -> None:
+    """Test botm.get_friends_bot_likelihood_scores() logs an error when a Timeout occurs.
+
+    Args:
+        botometer_auth (botometer.Botometer): A botometer.Botometer object authenticated to the Botometer and Twitter API.
+        friend_ids (list): A list containing two Twitter friend IDs.
+        mocker (pytest_mock.MockerFixture): A pytest_mock.MockerFixture providing a
+            thin-wrapper around the patching API from the mock library.
+        caplog: A pytest caplog fixture used to examine application log messages.
+    """
+    # Patch botometer.Botometer.check_accounts_in method to raise a Timeout error
+    mocker.patch(
+        "modules.botm.botometer.Botometer.check_accounts_in",
+        side_effect=botometer.Timeout(),
+    )
+    botm.get_friends_bot_likelihood_scores(api=botometer_auth, friends=friend_ids)
+    # Verify that an exception occurred in the logs
+    assert (
+        "An exception occurred and all retries to Botometer have been exhausted."
+        in caplog.text
+    )
+
+
 @pytest.mark.twitter
 def test_twitter_auth_conn_err(mocker: pytest_mock.MockerFixture, caplog) -> None:
     """Test an error is logged when a ConnectionError occurs in twtr.auth().
