@@ -6,6 +6,7 @@ import os
 import shutil
 import botometer
 import tweepy
+import requests
 import faker
 import datetime
 
@@ -466,6 +467,23 @@ def test_botometer_auth(mocker: pytest_mock.MockerFixture) -> None:
 
 
 @pytest.mark.botometer
+def test_botometer_auth_conn_err(mocker: pytest_mock.MockerFixture, caplog) -> None:
+    """Test an error is logged when a ConnectionError occurs in botm.auth().
+
+    Args:
+        mocker (pytest_mock.MockerFixture): A pytest_mock.MockerFixture providing a
+            thin-wrapper around the patching API from the mock library.
+        caplog: A pytest caplog fixture used to examine application log messages.
+    """
+    mocker.patch(
+        "modules.botm.botometer.Botometer",
+        side_effect=requests.exceptions.ConnectionError(),
+    )
+    botm.auth(api_key="API key", consumer_key="API key", consumer_secret="API secret")
+    assert "Failed to authenticate to the Botometer and Twitter API." in caplog.text
+
+
+@pytest.mark.botometer
 def test_botometer_auth_type(botometer_auth: botometer.Botometer) -> None:
     """Test botm.auth() (invoked in the botometer_auth fixture)
         returns an instance of botometer.Botometer.
@@ -532,6 +550,23 @@ def test_get_friends_bot_likelihood_scores_err(
     botm.get_friends_bot_likelihood_scores(api=botometer_auth, friends=[-1])
     # Verify that an exception occurred in the logs
     assert "Failed to get any friends bot likelihood results." in caplog.text
+
+
+@pytest.mark.twitter
+def test_twitter_auth_conn_err(mocker: pytest_mock.MockerFixture, caplog) -> None:
+    """Test an error is logged when a ConnectionError occurs in twtr.auth().
+
+    Args:
+        mocker (pytest_mock.MockerFixture): A pytest_mock.MockerFixture providing a
+            thin-wrapper around the patching API from the mock library.
+        caplog: A pytest caplog fixture used to examine application log messages.
+    """
+    mocker.patch(
+        "modules.twitter.tweepy.AppAuthHandler",
+        side_effect=requests.exceptions.ConnectionError(),
+    )
+    twtr.auth(consumer_key="API key", consumer_secret="API secret")
+    assert "Failed to authenticate to the Twitter API." in caplog.text
 
 
 @pytest.mark.twitter
