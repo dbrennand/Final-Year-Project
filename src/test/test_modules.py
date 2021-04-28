@@ -475,11 +475,13 @@ def test_botometer_auth_conn_err(mocker: pytest_mock.MockerFixture, caplog) -> N
             thin-wrapper around the patching API from the mock library.
         caplog: A pytest caplog fixture used to examine application log messages.
     """
+    # Patch botometer.Botometer class to raise a ConnectionError
     mocker.patch(
         "modules.botm.botometer.Botometer",
         side_effect=requests.exceptions.ConnectionError(),
     )
     botm.auth(api_key="API key", consumer_key="API key", consumer_secret="API secret")
+    # Verify that an exception occurred in the logs
     assert "Failed to authenticate to the Botometer and Twitter API." in caplog.text
 
 
@@ -561,11 +563,13 @@ def test_twitter_auth_conn_err(mocker: pytest_mock.MockerFixture, caplog) -> Non
             thin-wrapper around the patching API from the mock library.
         caplog: A pytest caplog fixture used to examine application log messages.
     """
+    # Patch tweepy.AppAuthHandler class to raise a ConnectionError
     mocker.patch(
         "modules.twitter.tweepy.AppAuthHandler",
         side_effect=requests.exceptions.ConnectionError(),
     )
     twtr.auth(consumer_key="API key", consumer_secret="API secret")
+    # Verify that an exception occurred in the logs
     assert "Failed to authenticate to the Twitter API." in caplog.text
 
 
