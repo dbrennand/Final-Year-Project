@@ -1,6 +1,7 @@
 """Module containing helper functions for the application.
 """
 import loguru
+import sys
 import os
 import typing
 import datetime
@@ -44,11 +45,15 @@ def check_log_record_level(record: dict) -> typing.Tuple[bool, None]:
 
 
 def init_log_handler() -> None:
-    """Initialise a log handler using loguru.
+    """Initialise log handlers using loguru.
 
-    Adds a log handler with a sink to handle log messages.
-    By default, loguru adds a sink to stderr. This also configures a sink to send logs to a file.
-    Furthermore, the logger is application wide meaning log calls can be made anywhere
+    Configures two log handlers:
+
+    1. The default log handler (sys.stderr)
+
+    2. A log handler with a sink configured to send log messages to a file.
+
+    The logging is application wide meaning log calls can be made anywhere
     as long as loguru is imported.
 
     https://loguru.readthedocs.io/en/stable/api/logger.html#loguru._logger.Logger.add
@@ -56,16 +61,25 @@ def init_log_handler() -> None:
     Returns:
         None.
     """
-    # Add a log handler to send log messages to a file
+    # Configuration for log handlers
     # Specify formatting, filtering and other parameters
     # Diagnose is False to prevent leak of credentials in production
-    loguru.logger.add(
-        sink="app_{time}.log",
-        format="{time:DD:MM:YYYY - HH:mm:ss} | {level} | {file}:{name}:{function}:{line} - {message}",
-        filter=check_log_record_level,
-        backtrace=True,
-        diagnose=False,
-    )
+    log_handler_configs = {
+        "handlers": [
+            # Configure stderr log handler
+            {"sink": sys.stderr, "backtrace": True, "diagnose": False},
+            # Configure log handler to send log messages to a file
+            {
+                "sink": "app_{time}.log",
+                "format": "{time:DD:MM:YYYY - HH:mm:ss} | {level} | {file}:{name}:{function}:{line} - {message}",
+                "filter": check_log_record_level,
+                "backtrace": True,
+                "diagnose": False,
+            },
+        ]
+    }
+    # Configure log handlers
+    loguru.logger.configure(**log_handler_configs)
 
 
 # Utility functions
