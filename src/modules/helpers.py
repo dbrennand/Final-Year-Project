@@ -61,7 +61,7 @@ def init_log_handler() -> None:
     # Diagnose is False to prevent leak of credentials in production
     loguru.logger.add(
         sink="app_{time}.log",
-        format="{time:DD:MM:YYYY - HH:mm:ss} | {level} | {file}:{name}:{line} - {message}",
+        format="{time:DD:MM:YYYY - HH:mm:ss} | {level} | {file}:{name}:{function}:{line} - {message}",
         filter=check_log_record_level,
         backtrace=True,
         diagnose=False,
