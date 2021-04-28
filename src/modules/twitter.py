@@ -25,6 +25,7 @@ def auth(consumer_key: str, consumer_secret: str) -> tweepy.API:
         )
     except requests.exceptions.ConnectionError as err:
         loguru.logger.exception(f"Failed to authenticate to the Twitter API.\n{err}")
+        return
     # Create and return an authenticated Tweepy API object
     # Retry 2 times if a request fails with a 3 second delay between retries
     # Wait if the application hits the Twitter API rate limit
