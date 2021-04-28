@@ -1,6 +1,7 @@
 """Module containing Botometer functions for the application.
 """
 import botometer
+import requests
 import loguru
 
 
@@ -20,13 +21,16 @@ def auth(api_key: str, consumer_key: str, consumer_secret: str) -> botometer.Bot
     loguru.logger.info("Authenticating to the Botometer API.")
     # Initialise botometer constructor and provide API credentials
     # Provide the same Tweepy parameters to the constructor
-    return botometer.Botometer(
-        rapidapi_key=api_key,
-        consumer_key=consumer_key,
-        consumer_secret=consumer_secret,
-        tweepy_kwargs={"retry_count": 2, "retry_delay": 3},
-        wait_on_ratelimit=True,
-    )
+    try:
+        return botometer.Botometer(
+            rapidapi_key=api_key,
+            consumer_key=consumer_key,
+            consumer_secret=consumer_secret,
+            tweepy_kwargs={"retry_count": 2, "retry_delay": 3},
+            wait_on_ratelimit=True,
+        )
+    except requests.exceptions.ConnectionError as err:
+        loguru.logger.exception(f"Failed to authenticate to the Botometer and Twitter API.\n{err}")
 
 
 def get_friends_bot_likelihood_scores(api: botometer.Botometer, friends: list) -> list:
