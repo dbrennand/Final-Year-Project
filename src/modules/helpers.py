@@ -49,7 +49,7 @@ def init_log_handler() -> None:
 
     Configures two log handlers:
 
-    1. The default log handler (sys.stderr)
+    1. The default log handler (sys.stderr).
 
     2. A log handler with a sink configured to send log messages to a file.
 
