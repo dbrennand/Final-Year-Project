@@ -1,6 +1,7 @@
 """Module containing Twitter functions for the application.
 """
 import tweepy
+import requests
 import loguru
 
 
@@ -18,9 +19,12 @@ def auth(consumer_key: str, consumer_secret: str) -> tweepy.API:
     """
     loguru.logger.info("Authenticating to the Twitter API.")
     # Initialise Tweepy application authentication flow
-    auth = tweepy.AppAuthHandler(
-        consumer_key=consumer_key, consumer_secret=consumer_secret
-    )
+    try:
+        auth = tweepy.AppAuthHandler(
+            consumer_key=consumer_key, consumer_secret=consumer_secret
+        )
+    except requests.exceptions.ConnectionError as err:
+        loguru.logger.exception(f"Failed to authenticate to the Twitter API.\n{err}")
     # Create and return an authenticated Tweepy API object
     # Retry 2 times if a request fails with a 3 second delay between retries
     # Wait if the application hits the Twitter API rate limit
