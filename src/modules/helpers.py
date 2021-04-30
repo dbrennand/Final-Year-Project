@@ -71,7 +71,7 @@ def init_log_handler() -> None:
             # Configure log handler to send log messages to a file
             {
                 "sink": "app_{time}.log",
-                "format": "{time:DD:MM:YYYY - HH:mm:ss} | {level} | {file}:{name}:{function}:{line} - {message}",
+                "format": "{time:DD-MM-YYYY - HH:mm:ss} | {level} | {file}:{name}:{function}:{line} - {message}",
                 "filter": check_log_record_level,
                 "backtrace": True,
                 "diagnose": False,
