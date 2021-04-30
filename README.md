@@ -229,7 +229,7 @@ optional arguments:
             -e EMAIL_SENDER_ADDRESS="Enter the account email address here." \
             -e EMAIL_SENDER_PASSWORD="Enter the account app password here." \
             -t fyp-app:latest \
-            python ./main.py {Twitter Username} {Email Address}
+            python ./src/main.py {Twitter Username} {Email Address}
         ```
 
     * Windows (PowerShell):
@@ -244,7 +244,7 @@ optional arguments:
             -e EMAIL_SENDER_ADDRESS="Enter the account email address here." `
             -e EMAIL_SENDER_PASSWORD="Enter the account app password here." `
             -t fyp-app:latest `
-            python ./main.py {Twitter Username} {Email Address}
+            python ./src/main.py {Twitter Username} {Email Address}
         ```
 
 ## Unit tests
