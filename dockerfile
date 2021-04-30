@@ -9,4 +9,4 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the app's source code to /usr/src/app inside the container
-COPY ./src .
+COPY . .
