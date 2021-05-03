@@ -53,7 +53,7 @@ Before using the project's application, credentials for the following are requir
 
 The project's application uses the Twitter API to collect a Twitter user's friends.
 
-To get access to the Twitter API, a developer account is needed. You can apply for one [here](https://developer.twitter.com/en/apply-for-access). You can find more information about this process [here](https://developer.twitter.com/en/docs/twitter-api/getting-started/getting-access-to-the-twitter-api).
+To get access to the Twitter API, a developer account is needed. You can apply for one [here](https://developer.twitter.com/en/apply-for-access) and find more information about the application process [here](https://developer.twitter.com/en/docs/twitter-api/getting-started/getting-access-to-the-twitter-api).
 
 Once you have a developer account, go to the [developer portal](https://developer.twitter.com/en/portal/dashboard) to create an application.
 
