@@ -89,7 +89,7 @@ Perform the steps below to generate an app password for a Google account. This w
 >
 > To generate an app password for a Google account, 2-Step Verification must be set up on the account.
 >
-> Documentation on how to this can be found [here](https://support.google.com/accounts/answer/185839?hl=en&ref_topic=7189195).
+> Documentation on how to do this can be found [here](https://support.google.com/accounts/answer/185839?hl=en&ref_topic=7189195).
 
 1. Temporarily enable [*less secure app access*](https://myaccount.google.com/lesssecureapps) on the Google account.
 
