@@ -179,6 +179,12 @@ optional arguments:
   -d, --demo  Flag to run the application in demo mode.
 ```
 
+> [!WARNING]
+>
+> For the project's application to collect a Twitter user's friends, the account must **not** be private/protected (have Tweets protected).
+>
+> Documentation on how to disable and enable account protections can be found [here](https://help.twitter.com/en/safety-and-security/how-to-make-twitter-private-and-public).
+
 > [!IMPORTANT]
 >
 > Ensure you replace the placeholders ({}) with a Twitter username (**without** the "@" symbol) and an email address.
