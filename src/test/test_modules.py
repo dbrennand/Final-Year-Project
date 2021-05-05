@@ -482,7 +482,7 @@ def test_botometer_auth_conn_err(mocker: pytest_mock.MockerFixture, caplog) -> N
     )
     botm.auth(api_key="API key", consumer_key="API key", consumer_secret="API secret")
     # Verify that an exception occurred in the logs
-    assert "Failed to authenticate to the Botometer and Twitter API." in caplog.text
+    assert "Failed to authenticate to the Botometer and Twitter APIs." in caplog.text
 
 
 @pytest.mark.botometer
