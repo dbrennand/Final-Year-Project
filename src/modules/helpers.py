@@ -56,7 +56,7 @@ def init_log_handler() -> None:
     The logging is application wide meaning log calls can be made anywhere
     as long as loguru is imported.
 
-    https://loguru.readthedocs.io/en/stable/api/logger.html#loguru._logger.Logger.add
+    https://loguru.readthedocs.io/en/stable/api/logger.html#loguru._logger.Logger.configure
 
     Returns:
         None.
