@@ -191,9 +191,9 @@ optional arguments:
 >
 > For example:
 >
-> `python ./src/main.py dbrennanduk exampleemail@gmail.com`
+> `python ./src/main.py dbrenuk exampleemail@gmail.com`
 >
-> The above command would produce a bot likelihood report for *@dbrennanduk's* Twitter friends and send the report to *exampleemail@gmail.com*.
+> The above command would produce a bot likelihood report for *@dbrenuk's* Twitter friends and send the report to *exampleemail@gmail.com*.
 
 > [!NOTE]
 >
